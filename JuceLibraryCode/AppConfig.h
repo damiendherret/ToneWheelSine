@@ -22,11 +22,13 @@
 // [END_USER_CODE_SECTION]
 
 //==============================================================================
+#define JUCE_MODULE_AVAILABLE_dRowAudio                     1
 #define JUCE_MODULE_AVAILABLE_juce_audio_basics             1
 #define JUCE_MODULE_AVAILABLE_juce_audio_devices            1
 #define JUCE_MODULE_AVAILABLE_juce_audio_formats            1
 #define JUCE_MODULE_AVAILABLE_juce_audio_plugin_client      1
 #define JUCE_MODULE_AVAILABLE_juce_audio_processors         1
+#define JUCE_MODULE_AVAILABLE_juce_audio_utils              1
 #define JUCE_MODULE_AVAILABLE_juce_core                     1
 #define JUCE_MODULE_AVAILABLE_juce_cryptography             1
 #define JUCE_MODULE_AVAILABLE_juce_data_structures          1
@@ -36,6 +38,21 @@
 #define JUCE_MODULE_AVAILABLE_juce_gui_extra                1
 #define JUCE_MODULE_AVAILABLE_juce_opengl                   1
 #define JUCE_MODULE_AVAILABLE_juce_video                    1
+
+//==============================================================================
+// dRowAudio flags:
+
+#ifndef    DROWAUDIO_USE_FFTREAL
+ //#define DROWAUDIO_USE_FFTREAL
+#endif
+
+#ifndef    DROWAUDIO_USE_SOUNDTOUCH
+ //#define DROWAUDIO_USE_SOUNDTOUCH
+#endif
+
+#ifndef    DROWAUDIO_USE_CURL
+ //#define DROWAUDIO_USE_CURL
+#endif
 
 //==============================================================================
 // juce_audio_devices flags:

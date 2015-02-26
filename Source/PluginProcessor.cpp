@@ -12,6 +12,7 @@
 #include "PluginEditor.h"
 
 
+
 //==============================================================================
 ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 {
@@ -188,3 +189,34 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ToneWheelSineAudioProcessor();
 }
+
+
+
+
+
+
+
+//===Basic Sine generator=====
+/*
+
+void ToneGeneratorAudioSource::getNextAudioBlock (const AudioSourceChannelInfo& info)
+{
+    if (phasePerSample == 0.0)
+        phasePerSample = (double_Pi * 2.0 * frequency) / sampleRate;
+    //phasePerSample = double_Pi * 2.0 / (sampleRate / frequency);
+    
+    
+    for (int i = 0; i < info.numSamples; ++i)
+    {
+        const float sample = amplitude * (float) std::sin (currentPhase);
+        currentPhase += phasePerSample;
+        if (currentPhase > 2.0 * double_Pi)
+        {
+            currentPhase = currentPhase - ( 2.0 * double_Pi );
+        }
+        //Logger::writeToLog("currentPhase :" + std::to_string(currentPhase));
+        
+        for (int j = info.buffer->getNumChannels(); --j >= 0;)
+            info.buffer->setSample (j, info.startSample + i, sample);
+    }
+}*/
