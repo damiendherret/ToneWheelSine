@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2013
+Project("{9C21048B-5E20-2EF4-4F40-0956D6C9C08B}") = "ToneWheelSine", "ToneWheelSine.vcxproj", "{C0A5A9FA-4036-84D3-7089-6E12502133F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0A5A9FA-4036-84D3-7089-6E12502133F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C0A5A9FA-4036-84D3-7089-6E12502133F4}.Debug|Win32.Build.0 = Debug|Win32
+		{C0A5A9FA-4036-84D3-7089-6E12502133F4}.Release|Win32.ActiveCfg = Release|Win32
+		{C0A5A9FA-4036-84D3-7089-6E12502133F4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
