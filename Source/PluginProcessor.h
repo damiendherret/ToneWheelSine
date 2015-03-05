@@ -12,6 +12,8 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "WheelSineGenerator.h"
+#include "../../drowaudio/dRowAudio/gui/dRowAudio_AudioOscilloscope.h"
 
 
 //==============================================================================
@@ -64,9 +66,16 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+	AudioOscilloscope getOscillo();
+
+	//==============================================================================
+	MidiKeyboardState keyboardState;
+	AudioOscilloscope* oscillo;
+	
 
 private:
     //==============================================================================
+	WheelSineGenerator theWheelGenerator;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneWheelSineAudioProcessor)
 };
 

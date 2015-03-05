@@ -51,7 +51,7 @@
 #endif
 
 #ifndef    DROWAUDIO_USE_CURL
- //#define DROWAUDIO_USE_CURL
+ #define   DROWAUDIO_USE_CURL 0
 #endif
 
 //==============================================================================
