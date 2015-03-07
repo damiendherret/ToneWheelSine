@@ -13,7 +13,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "WheelSineGenerator.h"
-#include "../../drowaudio/dRowAudio/gui/dRowAudio_AudioOscilloscope.h"
 
 
 //==============================================================================
@@ -66,11 +65,9 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-	AudioOscilloscope getOscillo();
 
 	//==============================================================================
 	MidiKeyboardState keyboardState;
-	AudioOscilloscope* oscillo;
 	
 
 private:

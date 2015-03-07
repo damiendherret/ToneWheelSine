@@ -16,11 +16,27 @@
 ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelSineAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    
+    sliders.add(&subSlider);
+    sliders.add(&slider5);
+    sliders.add(&mainSlider);
+    sliders.add(&slider8);
+    sliders.add(&slider12);
+    sliders.add(&slider15);
+    sliders.add(&slider17);
+    sliders.add(&slider19);
+    sliders.add(&slider22);
+    
 	
-    setSize (400, 300);
-	addAndMakeVisible(p.oscillo);
+    setSize (1000, 400);
+    
+    for (int i=0;i<sliders.size();++i)
+    {
+        Slider *s = sliders.getUnchecked(i);
+        initSlider( *s,i);
+        addAndMakeVisible(s);
+    }
+    
 
 }
 
@@ -35,11 +51,25 @@ void ToneWheelSineAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::black);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
+    g.drawFittedText ("ToneWheelSine", 0, 0, getWidth(), 30, Justification::centred, 1);
 }
 
 void ToneWheelSineAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    for (int i=0;i<sliders.size();++i)
+    {
+        Slider *s = sliders.getUnchecked(i);
+        s->setBounds((10+(i*20)+2), 30, 20, 100);
+    }
+}
+
+void ToneWheelSineAudioProcessorEditor::initSlider(Slider& slider, int position)
+{
+    slider.setSliderStyle (Slider::LinearBarVertical);
+    slider.setRange(0.0, 1.0, 0.05);
+    slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    slider.setTextValueSuffix ("Bar");
+    slider.setValue(0.0);
+   
+   
 }

@@ -16,6 +16,7 @@
 //==============================================================================
 ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 {
+
 }
 
 ToneWheelSineAudioProcessor::~ToneWheelSineAudioProcessor()
@@ -129,7 +130,7 @@ void ToneWheelSineAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	theWheelGenerator.initWheel();
+	theWheelGenerator.initWheel(sampleRate);
 
 }
 
@@ -150,10 +151,12 @@ void ToneWheelSineAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiB
 
 	// Now pass any incoming midi messages to our keyboard state object, and let it
 	// add messages to the buffer if the user is clicking on the on-screen keys
-	keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
+	//keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
 
 	// and now get the synth to process these midi events and generate its output.
-	theWheelGenerator.renderNextBlock(buffer, 0, numSamples);
+	theWheelGenerator.renderNextBlock(buffer, 0, numSamples, midiMessages);
+    
+
 }
 
 //==============================================================================
@@ -167,9 +170,6 @@ AudioProcessorEditor* ToneWheelSineAudioProcessor::createEditor()
     return new ToneWheelSineAudioProcessorEditor (*this);
 }
 
-AudioOscilloscope* getOscillo(){
-	return oscillo;
-}
 
 //==============================================================================
 void ToneWheelSineAudioProcessor::getStateInformation (MemoryBlock& destData)
@@ -198,28 +198,3 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 
 
-
-//===Basic Sine generator=====
-/*
-
-void ToneGeneratorAudioSource::getNextAudioBlock (const AudioSourceChannelInfo& info)
-{
-    if (phasePerSample == 0.0)
-        phasePerSample = (double_Pi * 2.0 * frequency) / sampleRate;
-    //phasePerSample = double_Pi * 2.0 / (sampleRate / frequency);
-    
-    
-    for (int i = 0; i < info.numSamples; ++i)
-    {
-        const float sample = amplitude * (float) std::sin (currentPhase);
-        currentPhase += phasePerSample;
-        if (currentPhase > 2.0 * double_Pi)
-        {
-            currentPhase = currentPhase - ( 2.0 * double_Pi );
-        }
-        //Logger::writeToLog("currentPhase :" + std::to_string(currentPhase));
-        
-        for (int j = info.buffer->getNumChannels(); --j >= 0;)
-            info.buffer->setSample (j, info.startSample + i, sample);
-    }
-}*/

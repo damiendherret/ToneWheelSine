@@ -27,12 +27,19 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void initSlider(Slider &slider, int position);
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    
+    
     ToneWheelSineAudioProcessor& processor;
+    
+    Slider subSlider, slider5, mainSlider, slider8, slider12, slider15, slider17,slider19, slider22;
+    
+    Array<Slider*> sliders;
 
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneWheelSineAudioProcessorEditor)
 };
 
