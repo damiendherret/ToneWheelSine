@@ -10,27 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/WheelSineGenerator.cpp"
-            timestampString = "447525999.499987"
+            timestampString = "447535870.9567"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "WheelSineGenerator::renderNextBlock(AudioSampleBuffer&amp; outputBuffer, int startSample, int numSamples, MidiBuffer&amp; midiMessages)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../Source/WheelSineGenerator.cpp"
-            timestampString = "447530456.444927"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "WheelSineGenerator::handleMidiEvent (const MidiMessage&amp; m)"
             landmarkType = "5">
          </BreakpointContent>

@@ -48,7 +48,7 @@ void WheelSineGenerator::initWheel(double initialSampleRate, HashMap<String, flo
     sampleRate = initialSampleRate;
 	currentPhase = 0;
 	phasePerSample = 0.0;
-	amplitude = 0.8f;
+	amplitude = 0.1f;
     
     attackTimeInMs = 100;
     releaseTimeInMs = 100;
@@ -74,6 +74,7 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
         int64 now = Time::getCurrentTime().toMilliseconds();
         
         HashMap<int, struct WheelNote>::Iterator iter (notesOn);
+        
         while (iter.next())
         {
             
@@ -121,10 +122,11 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
             
             //compute the sample for this note
             //sample = sample + amplitude * (*sliderGain) * gain * getSineValue(MidiMessage::getMidiNoteInHertz(wNote.note),currentPhase,*phase);
-            sample = sample + amplitude * gain * computeNote(wNote.note);
+            sample += amplitude * gain * computeNote(wNote.note);
         }
         
         currentPhase += (1/sampleRate);
+
         
         for (int j = outputBuffer.getNumChannels(); --j >= 0;)
             outputBuffer.addSample(j, startSample, sample);
