@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FILTERGRAPH>
-  <FILTER uid="1" x="0.410735" y="0.11704" uiLastX="" uiLastY="">
+  <FILTER uid="1" x="0.410735" y="0.11704" uiLastX="0" uiLastY="0">
     <PLUGIN name="Audio Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="Raw Material Software" version="1.0" file="" uid="246006c0"
             isInstrument="0" fileTime="0" numInputs="0" numOutputs="6" isShell="0"/>
     <STATE>0.</STATE>
   </FILTER>
-  <FILTER uid="2" x="0.696616" y="0.13253" uiLastX="" uiLastY="">
+  <FILTER uid="2" x="0.696616" y="0.13253" uiLastX="0" uiLastY="0">
     <PLUGIN name="Midi Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="Raw Material Software" version="1.0" file="" uid="cb5fde0b"
             isInstrument="0" fileTime="0" numInputs="0" numOutputs="0" isShell="0"/>
     <STATE>0.</STATE>
   </FILTER>
-  <FILTER uid="3" x="0.5" y="0.9" uiLastX="" uiLastY="">
+  <FILTER uid="3" x="0.5" y="0.9" uiLastX="0" uiLastY="0">
     <PLUGIN name="Audio Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="Raw Material Software" version="1.0" file="" uid="724248cb"
             isInstrument="0" fileTime="0" numInputs="6" numOutputs="0" isShell="0"/>
     <STATE>0.</STATE>
   </FILTER>
-  <FILTER uid="4" x="0.478413" y="0.433735" uiLastX="" uiLastY="">
+  <FILTER uid="4" x="0.478413" y="0.433735" uiLastX="0" uiLastY="0">
     <PLUGIN name="ToneWheelSine" format="VST" category="Synth" manufacturer="Johnqui"
             version="V1.0.0" file="/Users/damiendherret/Library/Audio/Plug-Ins/VST/ToneWheelSine.vst"
-            uid="54776c73" isInstrument="1" fileTime="14bebbca218" numInputs="2"
+            uid="54776c73" isInstrument="1" fileTime="14bf90f8980" numInputs="2"
             numOutputs="2" isShell="0"/>
     <STATE>160.CMlaKA....fQBMDZ....AP0crMG....Y....A.................................................................................................................................................................................</STATE>
+  </FILTER>
+  <FILTER uid="6" x="0.409568" y="0.638554" uiLastX="144" uiLastY="214">
+    <PLUGIN name="MAnalyzer" format="AudioUnit" category="Effect" manufacturer="MeldaProduction"
+            version="7.7.0" file="AudioUnit:Effects/aumf,MAeb,Meld" uid="61516460"
+            isInstrument="0" fileTime="0" numInputs="2" numOutputs="2" isShell="0"/>
+    <STATE>750.hAGaoMGcv.i0AHv.DTfAGfPBJr.CT4VXsUFWsEla0YVXiQWcxUlbTQVXzEFUzkGbkc0b0IFc4AWYWYWYxMWZu41UDUlYgUGazIQSkwFYOEg.Sgm1smYWuoMLTX36yuBKe6zJNePZQBnhgVTmT+XZz0dsGwPrpwF4DZS6u9chMIkuz1j1FnH4bk8qO47dNm3Gtg9WVtPfdloy4J4.r+YDLhImpR4x4CvqJl8wKvWNzqeNqn.jxQijTwquwziynRISbiJkM.eCuDi1R4Z1rBzGPeiOOq.NZkVyjEeUyf77EYJqb.FL5yR5ODrTv150OlwjWwSSYRiXRx8S3uAoKhzKFitgVdcxceRnl9jUNL.itCJdAcIDCFsjpoKXELMEDoygHHm4ugb9BkpHqRk.xP4XJicKqumylvSYP+vkFgGpGOQwjtQfOOxkopWt+0kPBtB5Z7v91j3+qlO+aFB+886d82gamYbAjB3iNrSwkEnDAcdNTRgXTY0UkPhOInWudciiwcNbPQ6FTmcRrVMkkmqzDzXkPogxAdFMNIY6ASBWHLKp5dcUwuNZnqXzmxMmMIS8hQ+ApXE6fZ17PLkas09ua8nwDxVVSpslrm09MVSNf0j+HqCpstx3iq0gaZ8NC7+OVOQIUygKlnQhkYzMtumtN.yqkaqKh8lP0C1p3WqbQsRfUIIop3MJgUJII1IoQIZ.tZuQwXgrPqDB.Mfc2pJXaqzYMFC+hmcUfCnc.sCna6.cPCPG5.ZGP6.51NPG1.zQNf1AzNftsCzQM.cWGP6.ZGP21A5tM.crCnc.sCna6.cbCPetCnc.sCna6.84Vf9YtZU9srx0L66g1wd9QfP7NgHh2IjQ7NgPh2IjR79sXh2QfS71FT71mT752o9O9dn2OIPK7FfDgUWalIQSAUlXR.vAG...H.PE.nA.m..K.DC.4.PP.jD.NIPoBnp.uB.......HP..........z...................H.s</STATE>
   </FILTER>
   <CONNECTION srcFilter="1" srcChannel="0" dstFilter="4" dstChannel="0"/>
   <CONNECTION srcFilter="1" srcChannel="1" dstFilter="4" dstChannel="1"/>
   <CONNECTION srcFilter="2" srcChannel="4096" dstFilter="4" dstChannel="4096"/>
-  <CONNECTION srcFilter="4" srcChannel="0" dstFilter="3" dstChannel="0"/>
-  <CONNECTION srcFilter="4" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="4" srcChannel="0" dstFilter="6" dstChannel="0"/>
+  <CONNECTION srcFilter="4" srcChannel="1" dstFilter="6" dstChannel="1"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="3" dstChannel="0"/>
+  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="3" dstChannel="1"/>
 </FILTERGRAPH>

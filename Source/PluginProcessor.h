@@ -11,8 +11,10 @@
 #ifndef PLUGINPROCESSOR_H_INCLUDED
 #define PLUGINPROCESSOR_H_INCLUDED
 
-#include "../JuceLibraryCode/JuceHeader.h"
 #include "WheelSineGenerator.h"
+#include "../JuceLibraryCode/JuceHeader.h"
+
+
 
 
 //==============================================================================
@@ -68,11 +70,20 @@ public:
 
 	//==============================================================================
 	MidiKeyboardState keyboardState;
+    float subSliderValue, slider5Value, mainSliderValue, slider8Value, slider12Value, slider15Value, slider17Value, slider19Value, slider22Value;
+    HashMap<String, float*> slidersValues;
+    
+    float subSliderPhaseValue, slider5PhaseValue, mainSliderPhaseValue, slider8PhaseValue, slider12PhaseValue, slider15PhaseValue, slider17PhaseValue, slider19PhaseValue, slider22PhaseValue;
+    HashMap<String, float*> slidersPhaseValues;
+    
+    float mainVolume;
+    int harmonicStyle;
+    
 	
 
 private:
     //==============================================================================
-	WheelSineGenerator theWheelGenerator;
+    WheelSineGenerator theWheelGenerator;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneWheelSineAudioProcessor)
 };
 

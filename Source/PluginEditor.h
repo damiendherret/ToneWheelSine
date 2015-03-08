@@ -18,7 +18,8 @@
 //==============================================================================
 /**
 */
-class ToneWheelSineAudioProcessorEditor  : public AudioProcessorEditor
+class ToneWheelSineAudioProcessorEditor  : public AudioProcessorEditor,
+                                            private Slider::Listener
 {
 public:
     ToneWheelSineAudioProcessorEditor (ToneWheelSineAudioProcessor&);
@@ -28,15 +29,27 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     void initSlider(Slider &slider, int position);
+    void initPhaseSlider(Slider &slider, int position);
+    void sliderValueChanged (Slider* slider) override;
 
-private:
-    
+
+private:    
     
     ToneWheelSineAudioProcessor& processor;
     
-    Slider subSlider, slider5, mainSlider, slider8, slider12, slider15, slider17,slider19, slider22;
-    
+    //Bar sliders ==============
+    Slider subSlider, slider5, mainSlider, slider8, slider12, slider15, slider17, slider19, slider22;
     Array<Slider*> sliders;
+    Array<juce::String> sliderNames = {"subSlider", "slider5", "mainSlider", "slider8", "slider12", "slider15", "slider17", "slider19", "slider22"};
+    
+    //Phase sliders ==============
+    Slider subPhaseSlider, phaseSlider5, mainPhaseSlider, phaseSlider8, phaseSlider12, phaseSlider15, phaseSlider17, phaseSlider19, phaseSlider22;
+    Array<Slider*> phaseSliders;
+    Array<juce::String> phaseSliderNames = {"phaseSubSlider", "phaseSlider5", "phaseMainSlider", "phaseSlider8", "phaseSlider12", "phaseSlider15", "phaseSlider17", "phaseSlider19", "phaseSlider22"};
+    
+    //Other controls
+    Slider volumeSlider;
+    Slider harmonicStyle;
 
     
     

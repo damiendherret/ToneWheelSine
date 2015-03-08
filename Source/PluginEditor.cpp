@@ -27,17 +27,57 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     sliders.add(&slider19);
     sliders.add(&slider22);
     
+    
+    phaseSliders.add(&subPhaseSlider);
+    phaseSliders.add(&phaseSlider5);
+    phaseSliders.add(&mainPhaseSlider);
+    phaseSliders.add(&phaseSlider8);
+    phaseSliders.add(&phaseSlider12);
+    phaseSliders.add(&phaseSlider15);
+    phaseSliders.add(&phaseSlider17);
+    phaseSliders.add(&phaseSlider19);
+    phaseSliders.add(&phaseSlider22);
+   
 	
-    setSize (1000, 400);
+    setSize (300, 300);
     
     for (int i=0;i<sliders.size();++i)
     {
         Slider *s = sliders.getUnchecked(i);
         initSlider( *s,i);
+        s->addListener(this);
         addAndMakeVisible(s);
+        
     }
     
-
+    for (int i=0;i<phaseSliders.size();++i)
+    {
+        Slider *s = phaseSliders.getUnchecked(i);
+        initPhaseSlider( *s,i);
+        s->addListener(this);
+        addAndMakeVisible(s);
+        
+    }
+    
+    volumeSlider.setSliderStyle (Slider::Rotary);
+    volumeSlider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
+    volumeSlider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
+    volumeSlider.setRange(0.0, 1.0, 0.01);
+    volumeSlider.setTextValueSuffix ("MainVolume");
+    volumeSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    volumeSlider.setValue(0.5);
+    volumeSlider.addListener(this);
+    addAndMakeVisible(&volumeSlider);
+    
+    harmonicStyle.setSliderStyle(Slider::LinearHorizontal);
+    harmonicStyle.setColour(Slider::ColourIds::thumbColourId, Colours::white);
+    harmonicStyle.setRange(0.0, 1.0, 1.0);
+    harmonicStyle.setValue(1.0);
+    harmonicStyle.setSize(35, 10);
+    harmonicStyle.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    harmonicStyle.addListener(this);
+    addAndMakeVisible(&harmonicStyle);
+    
 }
 
 ToneWheelSineAudioProcessorEditor::~ToneWheelSineAudioProcessorEditor()
@@ -47,11 +87,33 @@ ToneWheelSineAudioProcessorEditor::~ToneWheelSineAudioProcessorEditor()
 //==============================================================================
 void ToneWheelSineAudioProcessorEditor::paint (Graphics& g)
 {
-    g.fillAll (Colours::white);
+    //g.fillAll (Colours::white);
+    g.setGradientFill (ColourGradient (Colours::grey, 0, 0,
+                                       Colours::black, 0, (float) getHeight(), false));
+    g.fillAll();
 
-    g.setColour (Colours::black);
+    g.setColour (Colours::white);
     g.setFont (15.0f);
     g.drawFittedText ("ToneWheelSine", 0, 0, getWidth(), 30, Justification::centred, 1);
+    
+    g.drawFittedText("Sub", 5, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("5th", 35, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("Main", 65, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("8th", 95, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("12th", 125, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("15th", 155, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("17th", 185, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("19th", 215, 150, 30, 30, Justification::centred, 1);
+    g.drawFittedText("22th", 245, 150, 30, 30, Justification::centred, 1);
+    
+    g.drawLine(0, 185, 300, 185);
+    
+    g.drawFittedText("Harmonic Style", 0, 190, 150, 30, Justification::centred, 1);
+    g.drawFittedText("Pure", 0, 220, 50, 30, Justification::centred, 1);
+    g.drawFittedText("Tempered", 100, 220, 50, 30, Justification::centred, 1);
+    
+    g.drawFittedText("Main Volume", 150, 190, 150, 30, Justification::centred, 1);
+    
 }
 
 void ToneWheelSineAudioProcessorEditor::resized()
@@ -59,17 +121,77 @@ void ToneWheelSineAudioProcessorEditor::resized()
     for (int i=0;i<sliders.size();++i)
     {
         Slider *s = sliders.getUnchecked(i);
-        s->setBounds((10+(i*20)+2), 30, 20, 100);
+        s->setName(sliderNames[i]);
+        s->setBounds((10+(i*30)+2), 53, 20, 100);
     }
+    
+    for (int i=0;i<phaseSliders.size();++i)
+    {
+        Slider *s = phaseSliders.getUnchecked(i);
+        s->setName(phaseSliderNames[i]);
+        s->setBounds((10+(i*30)+2), 30, 20, 20);
+    }
+    
+    volumeSlider.setBounds(150, 220, 150, 50);
+    harmonicStyle.setBounds(50, 230, 50, 10);
 }
 
 void ToneWheelSineAudioProcessorEditor::initSlider(Slider& slider, int position)
 {
     slider.setSliderStyle (Slider::LinearBarVertical);
-    slider.setRange(0.0, 1.0, 0.05);
+    slider.setColour(Slider::ColourIds::thumbColourId, Colours::white);
+
+    slider.setRange(0.0, 1.0, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Bar");
     slider.setValue(0.0);
-   
-   
+    
 }
+
+void ToneWheelSineAudioProcessorEditor::initPhaseSlider(Slider& slider, int position)
+{
+    slider.setSliderStyle (Slider::Rotary);
+    slider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
+    slider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
+    slider.setRange(0.0, 1.0, 0.01);
+    slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    slider.setTextValueSuffix ("Rotary");
+    slider.setValue(0.0);
+    
+}
+
+void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
+{
+    if (&volumeSlider==slider)
+    {
+        //Volume Slider
+        //DBG("Vol");
+        processor.mainVolume=volumeSlider.getValue();
+    }
+    else if (&harmonicStyle==slider)
+    {
+        //Harmonic Style Slider
+        //DBG("Harm");
+        processor.harmonicStyle=harmonicStyle.getValue();
+    }
+    else
+    {
+        juce::String sliderName = slider->getName();
+        if (sliderName.startsWith("phase")){
+            //one of the phase sliders
+            //DBG("Phase");
+            float value = slider->getValue();
+            float* sliderValue = processor.slidersPhaseValues.operator[](sliderName);
+            *sliderValue = value;
+        }
+        else {
+            //one of the bar sliders
+            //DBG("BAR");
+            float value = slider->getValue();
+            float* sliderValue = processor.slidersValues.operator[](sliderName);
+            *sliderValue = value;
+        }
+    }
+}
+
+

@@ -10,13 +10,55 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "WheelSineGenerator.h"
 
 
 
 //==============================================================================
 ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 {
+    harmonicStyle=1;
+    
+    subSliderPhaseValue=0;
+    slider5PhaseValue=0;
+    mainSliderPhaseValue=0;
+    slider8PhaseValue=0;
+    slider12PhaseValue=0;
+    slider15PhaseValue=0;
+    slider17PhaseValue=0;
+    slider19PhaseValue=0;
+    slider22PhaseValue=0;
+    
+    subSliderValue=0;
+    slider5Value=0;
+    mainSliderValue=0;
+    slider8Value=0;
+    slider12Value=0;
+    slider15Value=0;
+    slider17Value=0;
+    slider19Value=0;
+    slider22Value=0;
+    
+    slidersValues.set("subSlider", &subSliderValue);
+    slidersValues.set("slider5", &slider5Value);
+    slidersValues.set("mainSlider", &mainSliderValue);
+    slidersValues.set("slider8", &slider8Value);
+    slidersValues.set("slider12", &slider12Value);
+    slidersValues.set("slider15", &slider15Value);
+    slidersValues.set("slider17", &slider17Value);
+    slidersValues.set("slider19", &slider19Value);
+    slidersValues.set("slider22", &slider22Value);
 
+    slidersPhaseValues.set("phaseSubSlider",&subSliderPhaseValue);
+    slidersPhaseValues.set("phaseSlider5",&slider5PhaseValue);
+    slidersPhaseValues.set("phaseMainSlider",&mainSliderPhaseValue);
+    slidersPhaseValues.set("phaseSlider8",&slider8PhaseValue);
+    slidersPhaseValues.set("phaseSlider12",&slider12PhaseValue);
+    slidersPhaseValues.set("phaseSlider15",&slider15PhaseValue);
+    slidersPhaseValues.set("phaseSlider17",&slider17PhaseValue);
+    slidersPhaseValues.set("phaseSlider19",&slider19PhaseValue);
+    slidersPhaseValues.set("phaseSlider22",&slider22PhaseValue);
+    
 }
 
 ToneWheelSineAudioProcessor::~ToneWheelSineAudioProcessor()
@@ -130,7 +172,7 @@ void ToneWheelSineAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	theWheelGenerator.initWheel(sampleRate);
+	theWheelGenerator.initWheel(sampleRate,&slidersValues,&slidersPhaseValues,&harmonicStyle);
 
 }
 
@@ -143,7 +185,7 @@ void ToneWheelSineAudioProcessor::releaseResources()
 void ToneWheelSineAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
 	const int numSamples = buffer.getNumSamples();
-	int channel, dp = 0;
+	//int channel, dp = 0;
 
 	// Go through the incoming data, and apply our gain to it...
 	//for (channel = 0; channel < getNumInputChannels(); ++channel)
@@ -155,7 +197,7 @@ void ToneWheelSineAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiB
 
 	// and now get the synth to process these midi events and generate its output.
 	theWheelGenerator.renderNextBlock(buffer, 0, numSamples, midiMessages);
-    
+    buffer.applyGain(mainVolume);
 
 }
 
