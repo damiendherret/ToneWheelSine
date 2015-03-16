@@ -17,6 +17,7 @@
 //==============================================================================
 ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 {
+    theWheelGenerator = new WheelSineGenerator();
     harmonicStyle=1;
     
     subSliderPhaseValue=0;
@@ -63,6 +64,7 @@ ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 
 ToneWheelSineAudioProcessor::~ToneWheelSineAudioProcessor()
 {
+    delete theWheelGenerator;
 }
 
 //==============================================================================
@@ -93,6 +95,11 @@ const String ToneWheelSineAudioProcessor::getParameterName (int index)
 const String ToneWheelSineAudioProcessor::getParameterText (int index)
 {
     return String();
+}
+
+void ToneWheelSineAudioProcessor::notifyChangedParameter(String sliderName, float value)
+{
+    theWheelGenerator->setParameter(sliderName, value);
 }
 
 const String ToneWheelSineAudioProcessor::getInputChannelName (int channelIndex) const
@@ -172,7 +179,7 @@ void ToneWheelSineAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	theWheelGenerator.initWheel(sampleRate,&slidersValues,&slidersPhaseValues,&harmonicStyle);
+	theWheelGenerator->initWheel(sampleRate,&slidersValues,&slidersPhaseValues,&harmonicStyle);
 
 }
 
@@ -185,18 +192,11 @@ void ToneWheelSineAudioProcessor::releaseResources()
 void ToneWheelSineAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
 	const int numSamples = buffer.getNumSamples();
-	//int channel, dp = 0;
-
-	// Go through the incoming data, and apply our gain to it...
-	//for (channel = 0; channel < getNumInputChannels(); ++channel)
-		//buffer.applyGain(channel, 0, buffer.getNumSamples(), 1.0f);
-
-	// Now pass any incoming midi messages to our keyboard state object, and let it
-	// add messages to the buffer if the user is clicking on the on-screen keys
-	//keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
-
-	// and now get the synth to process these midi events and generate its output.
-	theWheelGenerator.renderNextBlock(buffer, 0, numSamples, midiMessages);
+    
+    // Call to the generator===============================================
+    theWheelGenerator->renderNextBlock(buffer, 0, numSamples, midiMessages);
+    
+    // Apply Mian Volume ===============================================
     buffer.applyGain(mainVolume);
 
 }

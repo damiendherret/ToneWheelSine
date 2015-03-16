@@ -43,6 +43,7 @@ public:
     int getNumParameters() override;
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
+    void notifyChangedParameter(String sliderName, float value);
 
     const String getParameterName (int index) override;
     const String getParameterText (int index) override;
@@ -83,7 +84,7 @@ public:
 
 private:
     //==============================================================================
-    WheelSineGenerator theWheelGenerator;
+    WheelSineGenerator* theWheelGenerator;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToneWheelSineAudioProcessor)
 };
 

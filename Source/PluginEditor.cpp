@@ -153,7 +153,7 @@ void ToneWheelSineAudioProcessorEditor::initPhaseSlider(Slider& slider, int posi
     slider.setSliderStyle (Slider::Rotary);
     slider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
     slider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
-    slider.setRange(0.0, 1.0, 0.01);
+    slider.setRange(0.0, 2*double_Pi, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Rotary");
     slider.setValue(0.0);
@@ -177,20 +177,24 @@ void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
     else
     {
         juce::String sliderName = slider->getName();
+        float value;
         if (sliderName.startsWith("phase")){
             //one of the phase sliders
             //DBG("Phase");
-            float value = slider->getValue();
+            value = slider->getValue();
             float* sliderValue = processor.slidersPhaseValues.operator[](sliderName);
             *sliderValue = value;
         }
         else {
             //one of the bar sliders
             //DBG("BAR");
-            float value = slider->getValue();
+            value = slider->getValue();
             float* sliderValue = processor.slidersValues.operator[](sliderName);
             *sliderValue = value;
+           
         }
+        //notify modification
+        processor.notifyChangedParameter(sliderName,value);
     }
 }
 
