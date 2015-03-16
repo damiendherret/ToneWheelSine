@@ -44,7 +44,7 @@ void WheelSineGenerator::initWheel(double initialSampleRate, HashMap<String, flo
         slidersPhaseValues.set(key,sliderValue);
     }
    
-	frequency = 440;
+	//frequency = 440;
     sampleRate = initialSampleRate;
 	currentPhase = 0;
 	phasePerSample = 0.0;
@@ -54,7 +54,70 @@ void WheelSineGenerator::initWheel(double initialSampleRate, HashMap<String, flo
     releaseTimeInMs = 100;
 }
 
+void WheelSineGenerator::setParameter(String parameterName, float parameterValue){
+    
+    
+    // gain sliders management
+    if (parameterName.equalsIgnoreCase("subSlider")){
+        subSlider = *slidersValues.operator[]("subSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("slider5")){
+        slider5 = *slidersValues.operator[]("slider5");
+    }
+    else if (parameterName.equalsIgnoreCase("mainSlider")){
+        mainSlider = *slidersValues.operator[]("mainSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("slider8")){
+        slider8 = *slidersValues.operator[]("slider8");
+    }
+    else if (parameterName.equalsIgnoreCase("slider12")){
+        slider12 = *slidersValues.operator[]("slider12");
+    }
+    else if (parameterName.equalsIgnoreCase("slider15")){
+        slider15 = *slidersValues.operator[]("slider15");
+    }
+    else if (parameterName.equalsIgnoreCase("slider17")){
+        slider17 = *slidersValues.operator[]("slider17");
+    }
+    else if (parameterName.equalsIgnoreCase("slider19")){
+        slider19 = *slidersValues.operator[]("slider19");
+    }
+    else if (parameterName.equalsIgnoreCase("slider22")){
+        slider22 = *slidersValues.operator[]("slider22");
+    }
+    
+    //phase sliders management
+    else if (parameterName.equalsIgnoreCase("phaseSubSlider")){
+        phaseSubSlider = *slidersPhaseValues.operator[]("phaseSubSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider5")){
+        phaseSlider5 = *slidersPhaseValues.operator[]("phaseSlider5");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseMainSlider")){
+        phaseMainSlider = *slidersPhaseValues.operator[]("phaseMainSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider8")){
+        phaseSlider8 = *slidersPhaseValues.operator[]("phaseSlider8");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider12")){
+        phaseSlider12 = *slidersPhaseValues.operator[]("phaseSlider12");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider15")){
+        phaseSlider15 = *slidersPhaseValues.operator[]("phaseSlider15");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider17")){
+        phaseSlider17 = *slidersPhaseValues.operator[]("phaseSlider17");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider19")){
+        phaseSlider19 = *slidersPhaseValues.operator[]("phaseSlider19");
+    }
+    else if (parameterName.equalsIgnoreCase("phaseSlider22")){
+        phaseSlider22 = *slidersPhaseValues.operator[]("phaseSlider22");
+    }
+    
 
+    
+}
 
 void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int startSample, int numSamples, MidiBuffer& midiMessages)
 {
@@ -94,7 +157,7 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
                     //DBG("attacking - done");
                 }
                 else{
-                    //calculate the gain to apply for this particular time of the attacj
+                    //calculate the gain to apply for this particular time of the attac
                     gain = (now - wNote.noteOnTime) / attackTimeInMs;
                     //DBG((now - wNote.noteOnTime)/attackTimeInMs);
                     //DBG("attacking ....");
@@ -122,14 +185,23 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
             
             //compute the sample for this note
             //sample = sample + amplitude * (*sliderGain) * gain * getSineValue(MidiMessage::getMidiNoteInHertz(wNote.note),currentPhase,*phase);
+            
+            //final
             sample += amplitude * gain * computeNote(wNote.note);
+            
+            //debug
+            //sample += amplitude * gain * getSineValue(MidiMessage::getMidiNoteInHertz(wNote.note),currentPhase,0);
+        
         }
         
         currentPhase += (1/sampleRate);
 
         
         for (int j = outputBuffer.getNumChannels(); --j >= 0;)
+        {
+            //DBG(sample);
             outputBuffer.addSample(j, startSample, sample);
+        }
         ++startSample;
         
     }
@@ -140,131 +212,34 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
 
 float WheelSineGenerator::computeNote(int note)
 {
-    float calculus;
-    if (*harmonicStyle==1){
+    float calculus=0.0;
+    if (*harmonicStyle==1)
+    {
         //tempered harmonics
-        
-        float* sliderGain /*= slidersValues.operator[]("mainSlider")*/;
-        float* phase /*= slidersPhaseValues.operator[]("phaseMainSlider")*/;
-
-        sliderGain = slidersValues.operator[]("subSlider");
-        phase = slidersPhaseValues.operator[]("phaseSubSlider");
-        calculus += (*sliderGain)
-                    * getSineValue(MidiMessage::getMidiNoteInHertz(note-12),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider5");
-        phase = slidersPhaseValues.operator[]("phaseSlider5");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+7),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("mainSlider");
-        phase = slidersPhaseValues.operator[]("phaseMainSlider");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider8");
-        phase = slidersPhaseValues.operator[]("phaseSlider8");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+12),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider12");
-        phase = slidersPhaseValues.operator[]("phaseSlider12");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+19),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider15");
-        phase = slidersPhaseValues.operator[]("phaseSlider15");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+24),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider17");
-        phase = slidersPhaseValues.operator[]("phaseSlider17");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+28),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider19");
-        phase = slidersPhaseValues.operator[]("phaseSlider19");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+31),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider22");
-        phase = slidersPhaseValues.operator[]("phaseSlider22");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-                        * getSineValue(MidiMessage::getMidiNoteInHertz(note+36),currentPhase,*phase);
-        
+        calculus += subSlider * getSineValue(MidiMessage::getMidiNoteInHertz(note-12),currentPhase,phaseSubSlider);
+        calculus += slider5 * getSineValue(MidiMessage::getMidiNoteInHertz(note+7),currentPhase,phaseSlider5);
+        calculus += mainSlider * getSineValue(MidiMessage::getMidiNoteInHertz(note),currentPhase,phaseMainSlider);
+        calculus += slider8 * getSineValue(MidiMessage::getMidiNoteInHertz(note+12),currentPhase,phaseSlider8);
+        calculus += slider12 * getSineValue(MidiMessage::getMidiNoteInHertz(note+19),currentPhase,phaseSlider12);
+        calculus += slider15 * getSineValue(MidiMessage::getMidiNoteInHertz(note+24),currentPhase,phaseSlider15);
+        calculus += slider17 * getSineValue(MidiMessage::getMidiNoteInHertz(note+28),currentPhase,phaseSlider17);
+        calculus += slider19 * getSineValue(MidiMessage::getMidiNoteInHertz(note+31),currentPhase,phaseSlider19);
+        calculus += slider22 * getSineValue(MidiMessage::getMidiNoteInHertz(note+36),currentPhase,phaseSlider22);
     }
     else {
         
         //pure harmonics
-        //tempered harmonics
-        
-        float* sliderGain /*= slidersValues.operator[]("mainSlider")*/;
-        float* phase /*= slidersPhaseValues.operator[]("phaseMainSlider")*/;
         double frequency = MidiMessage::getMidiNoteInHertz(note);
-        
-        
-        sliderGain = slidersValues.operator[]("subSlider");
-        phase = slidersPhaseValues.operator[]("phaseSubSlider");
-        calculus += (*sliderGain)
-        * getSineValue(frequency/2,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider5");
-        phase = slidersPhaseValues.operator[]("phaseSlider5");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*(3/2),currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("mainSlider");
-        phase = slidersPhaseValues.operator[]("phaseMainSlider");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider8");
-        phase = slidersPhaseValues.operator[]("phaseSlider8");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*2,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider12");
-        phase = slidersPhaseValues.operator[]("phaseSlider12");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*3,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider15");
-        phase = slidersPhaseValues.operator[]("phaseSlider15");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*4,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider17");
-        phase = slidersPhaseValues.operator[]("phaseSlider17");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*5,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider19");
-        phase = slidersPhaseValues.operator[]("phaseSlider19");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*6,currentPhase,*phase);
-        
-        sliderGain = slidersValues.operator[]("slider22");
-        phase = slidersPhaseValues.operator[]("phaseSlider22");
-        if (*sliderGain!=0)
-            calculus += (*sliderGain)
-            * getSineValue(frequency*8,currentPhase,*phase);
-        
-        
+
+        calculus += subSlider * getSineValue(frequency/2,currentPhase,phaseSubSlider);
+        calculus += slider5 * getSineValue(frequency*(1.5f),currentPhase,phaseSlider5);
+        calculus += mainSlider * getSineValue(frequency,currentPhase,phaseMainSlider);
+        calculus += slider8 * getSineValue(frequency*2,currentPhase,phaseSlider8);
+        calculus += slider12 * getSineValue(frequency*3,currentPhase,phaseSlider12);
+        calculus += slider15 * getSineValue(frequency*4,currentPhase,phaseSlider15);
+        calculus += slider17 * getSineValue(frequency*5,currentPhase,phaseSlider17);
+        calculus += slider19 * getSineValue(frequency*6,currentPhase,phaseSlider19);
+        calculus += slider22 * getSineValue(frequency*8,currentPhase,phaseSlider22);
         
     }
 
