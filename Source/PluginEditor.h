@@ -30,6 +30,8 @@ public:
     void resized() override;
     void initSlider(Slider &slider, int position);
     void initPhaseSlider(Slider &slider, int position);
+    void initWaveSlider(Slider &slider, int position);
+    void initTremSlider(Slider &slider, int position);
     void sliderValueChanged (Slider* slider) override;
 
 
@@ -47,9 +49,22 @@ private:
     Array<Slider*> phaseSliders;
     Array<juce::String> phaseSliderNames = {"phaseSubSlider", "phaseSlider5", "phaseMainSlider", "phaseSlider8", "phaseSlider12", "phaseSlider15", "phaseSlider17", "phaseSlider19", "phaseSlider22"};
     
+    //Wave sliders ==============
+    Slider subWaveSlider, waveSlider5, mainWaveSlider, waveSlider8, waveSlider12, waveSlider15, waveSlider17, waveSlider19, waveSlider22;
+    Array<Slider*> waveSliders;
+    Array<juce::String> waveSliderNames = {"waveSubSlider", "waveSlider5", "waveMainSlider", "waveSlider8", "waveSlider12", "waveSlider15", "waveSlider17", "waveSlider19", "waveSlider22"};
+    
+    //Tremolo sliders ==============
+    Slider subTremSlider, tremSlider5, mainTremSlider, tremSlider8, tremSlider12, tremSlider15, tremSlider17, tremSlider19, tremSlider22;
+    Array<Slider*> tremSliders;
+    Array<juce::String> tremSliderNames = {"tremSubSlider", "tremSlider5", "tremMainSlider", "tremSlider8", "tremSlider12", "tremSlider15", "tremSlider17", "tremSlider19", "tremSlider22"};
+    
+    
     //Other controls
     Slider volumeSlider;
     Slider harmonicStyle;
+    Slider tremoloSpeedSlider;
+    Slider tremoloDepthSlider;
 
     
     

@@ -19,10 +19,24 @@ WheelSineGenerator::~WheelSineGenerator()
 {
 }
 
-void WheelSineGenerator::initWheel(double initialSampleRate, HashMap<String, float*> *sliders, HashMap<String, float*> *phaseSliders, int* pHarmonicStyle)
+void WheelSineGenerator::initWheel(
+                                   double initialSampleRate,
+                                   HashMap<String, float*> *sliders,
+                                   HashMap<String, float*> *phaseSliders,
+                                   HashMap<String, int*> *waveSliders,
+                                   HashMap<String, float*> *tremSliders,
+                                   int* pHarmonicStyle,
+                                   float* pTremoloSpeed,
+                                   float* pTremoloDepth)
 {
     //ptr to harmonics
     harmonicStyle = pHarmonicStyle;
+    
+    //ptr to trem speed
+    tremoloSpeed = pTremoloSpeed;
+    
+    //ptr to harmonics
+    tremoloDepth = pTremoloDepth;
     
     //Ptr to bar
     slidersValues.clear();
@@ -43,11 +57,31 @@ void WheelSineGenerator::initWheel(double initialSampleRate, HashMap<String, flo
         float* sliderValue = iter2.getValue();
         slidersPhaseValues.set(key,sliderValue);
     }
+    
+    //ptr to waveforms
+    slidersWaveValues.clear();
+    HashMap<String, int*>::Iterator iter3 (*waveSliders);
+    while (iter3.next())
+    {
+        String key = iter3.getKey();
+        int* sliderValue = iter3.getValue();
+        slidersWaveValues.set(key,sliderValue);
+    }
+    
+    //ptr to tremolos
+    slidersTremValues.clear();
+    HashMap<String, float*>::Iterator iter4 (*tremSliders);
+    while (iter4.next())
+    {
+        String key = iter4.getKey();
+        float* sliderValue = iter4.getValue();
+        slidersTremValues.set(key,sliderValue);
+    }
    
 	//frequency = 440;
     sampleRate = initialSampleRate;
 	currentPhase = 0;
-	phasePerSample = 0.0;
+
 	amplitude = 0.1f;
     
     attackTimeInMs = 100;
@@ -115,6 +149,63 @@ void WheelSineGenerator::setParameter(String parameterName, float parameterValue
         phaseSlider22 = *slidersPhaseValues.operator[]("phaseSlider22");
     }
     
+    //wave sliders management
+    else if (parameterName.equalsIgnoreCase("waveSubSlider")){
+        waveSubSlider = *slidersWaveValues.operator[]("waveSubSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider5")){
+        waveSlider5 = *slidersWaveValues.operator[]("waveSlider5");
+    }
+    else if (parameterName.equalsIgnoreCase("waveMainSlider")){
+        waveMainSlider = *slidersWaveValues.operator[]("waveMainSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider8")){
+        waveSlider8 = *slidersWaveValues.operator[]("waveSlider8");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider12")){
+        waveSlider12 = *slidersWaveValues.operator[]("waveSlider12");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider15")){
+        waveSlider15 = *slidersWaveValues.operator[]("waveSlider15");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider17")){
+        waveSlider17 = *slidersWaveValues.operator[]("waveSlider17");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider19")){
+        waveSlider19 = *slidersWaveValues.operator[]("waveSlider19");
+    }
+    else if (parameterName.equalsIgnoreCase("waveSlider22")){
+        waveSlider22 = *slidersWaveValues.operator[]("waveSlider22");
+    }
+    
+    //trem sliders management
+    else if (parameterName.equalsIgnoreCase("tremSubSlider")){
+        tremSubSlider = *slidersTremValues.operator[]("tremSubSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider5")){
+       tremSlider5 = *slidersTremValues.operator[]("tremSlider5");
+    }
+    else if (parameterName.equalsIgnoreCase("tremMainSlider")){
+        tremMainSlider = *slidersTremValues.operator[]("tremMainSlider");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider8")){
+        tremSlider8 = *slidersTremValues.operator[]("tremSlider8");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider12")){
+        tremSlider12 = *slidersTremValues.operator[]("tremSlider12");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider15")){
+        tremSlider15 = *slidersTremValues.operator[]("tremSlider15");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider17")){
+        tremSlider17 = *slidersTremValues.operator[]("tremSlider17");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider19")){
+        tremSlider19 = *slidersTremValues.operator[]("tremSlider19");
+    }
+    else if (parameterName.equalsIgnoreCase("tremSlider22")){
+        tremSlider22 = *slidersTremValues.operator[]("tremSlider22");
+    }
 
     
 }
@@ -216,34 +307,49 @@ float WheelSineGenerator::computeNote(int note)
     if (*harmonicStyle==1)
     {
         //tempered harmonics
-        calculus += subSlider * getSineValue(MidiMessage::getMidiNoteInHertz(note-12),currentPhase,phaseSubSlider);
-        calculus += slider5 * getSineValue(MidiMessage::getMidiNoteInHertz(note+7),currentPhase,phaseSlider5);
-        calculus += mainSlider * getSineValue(MidiMessage::getMidiNoteInHertz(note),currentPhase,phaseMainSlider);
-        calculus += slider8 * getSineValue(MidiMessage::getMidiNoteInHertz(note+12),currentPhase,phaseSlider8);
-        calculus += slider12 * getSineValue(MidiMessage::getMidiNoteInHertz(note+19),currentPhase,phaseSlider12);
-        calculus += slider15 * getSineValue(MidiMessage::getMidiNoteInHertz(note+24),currentPhase,phaseSlider15);
-        calculus += slider17 * getSineValue(MidiMessage::getMidiNoteInHertz(note+28),currentPhase,phaseSlider17);
-        calculus += slider19 * getSineValue(MidiMessage::getMidiNoteInHertz(note+31),currentPhase,phaseSlider19);
-        calculus += slider22 * getSineValue(MidiMessage::getMidiNoteInHertz(note+36),currentPhase,phaseSlider22);
+        calculus += subSlider * getValue(MidiMessage::getMidiNoteInHertz(note-12),currentPhase,phaseSubSlider,waveSubSlider);
+        calculus += slider5 * getValue(MidiMessage::getMidiNoteInHertz(note+7),currentPhase,phaseSlider5,waveSlider5);
+        calculus += mainSlider * getValue(MidiMessage::getMidiNoteInHertz(note),currentPhase,phaseMainSlider,waveMainSlider);
+        calculus += slider8 * getValue(MidiMessage::getMidiNoteInHertz(note+12),currentPhase,phaseSlider8,waveSlider8);
+        calculus += slider12 * getValue(MidiMessage::getMidiNoteInHertz(note+19),currentPhase,phaseSlider12,waveSlider12);
+        calculus += slider15 * getValue(MidiMessage::getMidiNoteInHertz(note+24),currentPhase,phaseSlider15,waveSlider15);
+        calculus += slider17 * getValue(MidiMessage::getMidiNoteInHertz(note+28),currentPhase,phaseSlider17,waveSlider17);
+        calculus += slider19 * getValue(MidiMessage::getMidiNoteInHertz(note+31),currentPhase,phaseSlider19,waveSlider19);
+        calculus += slider22 * getValue(MidiMessage::getMidiNoteInHertz(note+36),currentPhase,phaseSlider22,waveSlider22);
     }
     else {
         
         //pure harmonics
         double frequency = MidiMessage::getMidiNoteInHertz(note);
 
-        calculus += subSlider * getSineValue(frequency/2,currentPhase,phaseSubSlider);
-        calculus += slider5 * getSineValue(frequency*(1.5f),currentPhase,phaseSlider5);
-        calculus += mainSlider * getSineValue(frequency,currentPhase,phaseMainSlider);
-        calculus += slider8 * getSineValue(frequency*2,currentPhase,phaseSlider8);
-        calculus += slider12 * getSineValue(frequency*3,currentPhase,phaseSlider12);
-        calculus += slider15 * getSineValue(frequency*4,currentPhase,phaseSlider15);
-        calculus += slider17 * getSineValue(frequency*5,currentPhase,phaseSlider17);
-        calculus += slider19 * getSineValue(frequency*6,currentPhase,phaseSlider19);
-        calculus += slider22 * getSineValue(frequency*8,currentPhase,phaseSlider22);
+        calculus += subSlider * getValue(frequency/2,currentPhase,phaseSubSlider,waveSubSlider);
+        calculus += slider5 * getValue(frequency*(1.5f),currentPhase,phaseSlider5,waveSlider5);
+        calculus += mainSlider * getValue(frequency,currentPhase,phaseMainSlider,waveMainSlider);
+        calculus += slider8 * getValue(frequency*2,currentPhase,phaseSlider8,waveSlider8);
+        calculus += slider12 * getValue(frequency*3,currentPhase,phaseSlider12,waveSlider12);
+        calculus += slider15 * getValue(frequency*4,currentPhase,phaseSlider15,waveSlider15);
+        calculus += slider17 * getValue(frequency*5,currentPhase,phaseSlider17,waveSlider17);
+        calculus += slider19 * getValue(frequency*6,currentPhase,phaseSlider19,waveSlider19);
+        calculus += slider22 * getValue(frequency*8,currentPhase,phaseSlider22,waveSlider22);
         
     }
 
     return calculus;
+}
+
+float WheelSineGenerator::getValue(double frequency, double time, double phase, int waveform)
+{
+    switch (waveform) {
+        case 0:
+            return getSineValue(frequency,time,phase);
+            break;
+        case 1:
+            return getTriangleValue(frequency,time,phase);
+            break;    
+        default:
+            return getSineValue(frequency,time,phase);
+            break;
+    }
 }
 
 float WheelSineGenerator::getSineValue(double frequency, double time, double phase)
@@ -251,6 +357,17 @@ float WheelSineGenerator::getSineValue(double frequency, double time, double pha
     return std::sin((2.0 * double_Pi * frequency * time) + phase);
 }
 
+float WheelSineGenerator::getTriangleValue(double frequency, double time, double phase)
+{
+    while (time > sampleRate/frequency)
+    {
+        time = time - (1/frequency);
+    }
+
+    return std::sin((2.0 * double_Pi * frequency * time) + phase);
+    
+    
+}
 
 void WheelSineGenerator::handleMidiEvent (const MidiMessage& m)
 {

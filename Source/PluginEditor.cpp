@@ -27,7 +27,6 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     sliders.add(&slider19);
     sliders.add(&slider22);
     
-    
     phaseSliders.add(&subPhaseSlider);
     phaseSliders.add(&phaseSlider5);
     phaseSliders.add(&mainPhaseSlider);
@@ -38,8 +37,27 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     phaseSliders.add(&phaseSlider19);
     phaseSliders.add(&phaseSlider22);
    
-	
-    setSize (300, 300);
+    waveSliders.add(&subWaveSlider);
+    waveSliders.add(&waveSlider5);
+    waveSliders.add(&mainWaveSlider);
+    waveSliders.add(&waveSlider8);
+    waveSliders.add(&waveSlider12);
+    waveSliders.add(&waveSlider15);
+    waveSliders.add(&waveSlider17);
+    waveSliders.add(&waveSlider19);
+    waveSliders.add(&waveSlider22);
+    
+    tremSliders.add(&subTremSlider);
+    tremSliders.add(&tremSlider5);
+    tremSliders.add(&mainTremSlider);
+    tremSliders.add(&tremSlider8);
+    tremSliders.add(&tremSlider12);
+    tremSliders.add(&tremSlider15);
+    tremSliders.add(&tremSlider17);
+    tremSliders.add(&tremSlider19);
+    tremSliders.add(&tremSlider22);
+    
+    setSize (300, 400);
     
     for (int i=0;i<sliders.size();++i)
     {
@@ -59,6 +77,56 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
         
     }
     
+    for (int i=0;i<waveSliders.size();++i)
+    {
+        Slider *s = waveSliders.getUnchecked(i);
+        initWaveSlider( *s,i);
+        s->addListener(this);
+        addAndMakeVisible(s);
+        
+    }
+    
+    for (int i=0;i<tremSliders.size();++i)
+    {
+        Slider *s = tremSliders.getUnchecked(i);
+        initTremSlider( *s,i);
+        s->addListener(this);
+        addAndMakeVisible(s);
+        
+    }
+    
+    
+  
+    
+    harmonicStyle.setSliderStyle(Slider::LinearVertical);
+    harmonicStyle.setColour(Slider::ColourIds::thumbColourId, Colours::white);
+    harmonicStyle.setRange(0.0, 1.0, 1.0);
+    harmonicStyle.setValue(1.0);
+    harmonicStyle.setSize(10, 30);
+    harmonicStyle.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    harmonicStyle.addListener(this);
+    addAndMakeVisible(&harmonicStyle);
+    
+    tremoloSpeedSlider.setSliderStyle (Slider::Rotary);
+    tremoloSpeedSlider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
+    tremoloSpeedSlider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
+    tremoloSpeedSlider.setRange(0.0, 1.0, 0.01);
+    tremoloSpeedSlider.setTextValueSuffix ("Tremolo Speed");
+    tremoloSpeedSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    tremoloSpeedSlider.setValue(0.5);
+    tremoloSpeedSlider.addListener(this);
+    addAndMakeVisible(&tremoloSpeedSlider);
+    
+    tremoloDepthSlider.setSliderStyle (Slider::Rotary);
+    tremoloDepthSlider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
+    tremoloDepthSlider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
+    tremoloDepthSlider.setRange(0.0, 1.0, 0.01);
+    tremoloDepthSlider.setTextValueSuffix ("Tremolo Depth");
+    tremoloDepthSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    tremoloDepthSlider.setValue(0.5);
+    tremoloDepthSlider.addListener(this);
+    addAndMakeVisible(&tremoloDepthSlider);
+    
     volumeSlider.setSliderStyle (Slider::Rotary);
     volumeSlider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
     volumeSlider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
@@ -68,15 +136,6 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(&volumeSlider);
-    
-    harmonicStyle.setSliderStyle(Slider::LinearHorizontal);
-    harmonicStyle.setColour(Slider::ColourIds::thumbColourId, Colours::white);
-    harmonicStyle.setRange(0.0, 1.0, 1.0);
-    harmonicStyle.setValue(1.0);
-    harmonicStyle.setSize(35, 10);
-    harmonicStyle.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
-    harmonicStyle.addListener(this);
-    addAndMakeVisible(&harmonicStyle);
     
 }
 
@@ -96,23 +155,46 @@ void ToneWheelSineAudioProcessorEditor::paint (Graphics& g)
     g.setFont (15.0f);
     g.drawFittedText ("ToneWheelSine", 0, 0, getWidth(), 30, Justification::centred, 1);
     
-    g.drawFittedText("Sub", 5, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("5th", 35, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("Main", 65, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("8th", 95, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("12th", 125, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("15th", 155, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("17th", 185, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("19th", 215, 150, 30, 30, Justification::centred, 1);
-    g.drawFittedText("22th", 245, 150, 30, 30, Justification::centred, 1);
+    g.drawLine(0, 25, 300, 25);
+    g.drawFittedText ("Phase", 0, 28, getWidth(), 15, Justification::left, 1);
     
-    g.drawLine(0, 185, 300, 185);
+    g.drawFittedText("S", 7, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("5", 37, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("M", 67, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("8", 97, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("12", 127, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("15", 157, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("17", 187, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("19", 217, 275, 30, 30, Justification::centred, 1);
+    g.drawFittedText("22", 247, 275, 30, 30, Justification::centred, 1);
     
-    g.drawFittedText("Harmonic Style", 0, 190, 150, 30, Justification::centred, 1);
-    g.drawFittedText("Pure", 0, 220, 50, 30, Justification::centred, 1);
-    g.drawFittedText("Tempered", 100, 220, 50, 30, Justification::centred, 1);
+    g.drawFittedText ("Wave", 0, 175, getWidth(), 15, Justification::left, 1);
     
-    g.drawFittedText("Main Volume", 150, 190, 150, 30, Justification::centred, 1);
+    for (int i=0;i<waveSliders.size();++i)
+    {
+        g.drawFittedText("^", (10+(i*30)+2), 190, 20, 10, Justification::centred, 1);
+    }
+    
+    for (int i=0;i<waveSliders.size();++i)
+    {
+        g.drawFittedText("~", (10+(i*30)+2), 230, 20, 10, Justification::centred, 1);
+    }
+    
+    
+    g.drawFittedText ("Tremolo", 0, 240, getWidth(), 15, Justification::left, 1);
+    
+    g.drawLine(0, 300, 300, 300);
+    
+    g.drawFittedText("Harmonic", 0, 300, 100, 30, Justification::centred, 1);
+    g.drawFittedText("Tremolo", 100, 300, 100, 30, Justification::centred, 1);
+    g.drawFittedText("Volume", 200, 300, 100, 30, Justification::centred, 1);
+    
+    g.drawFittedText("Pure", 0, 320, 100, 30, Justification::centred, 1);
+    g.drawFittedText("Tempered", 0, 370, 100, 30, Justification::centred, 1);
+    
+    g.drawFittedText("Speed", 130, 330, 80, 20, Justification::left, 1);
+    g.drawFittedText("Depth", 130, 360, 80, 20, Justification::left, 1);
+    
     
 }
 
@@ -122,25 +204,41 @@ void ToneWheelSineAudioProcessorEditor::resized()
     {
         Slider *s = sliders.getUnchecked(i);
         s->setName(sliderNames[i]);
-        s->setBounds((10+(i*30)+2), 53, 20, 100);
+        s->setBounds((10+(i*30)+2), 68, 20, 100);
     }
     
     for (int i=0;i<phaseSliders.size();++i)
     {
         Slider *s = phaseSliders.getUnchecked(i);
         s->setName(phaseSliderNames[i]);
-        s->setBounds((10+(i*30)+2), 30, 20, 20);
+        s->setBounds((10+(i*30)+2), 45, 20, 20);
     }
     
-    volumeSlider.setBounds(150, 220, 150, 50);
-    harmonicStyle.setBounds(50, 230, 50, 10);
+    for (int i=0;i<waveSliders.size();++i)
+    {
+        Slider *s = waveSliders.getUnchecked(i);
+        s->setName(waveSliderNames[i]);
+        s->setBounds((10+(i*30)+7), 200, 20, 30);
+    }
+    
+    for (int i=0;i<tremSliders.size();++i)
+    {
+        Slider *s = tremSliders.getUnchecked(i);
+        s->setName(tremSliderNames[i]);
+        s->setBounds((10+(i*30)+2), 260, 20, 20);
+    }
+    
+    harmonicStyle.setBounds(45, 345, 20, 30);
+    tremoloSpeedSlider.setBounds(110, 330, 20, 20);
+    tremoloDepthSlider.setBounds(110, 360, 20, 20);
+    volumeSlider.setBounds(200, 340, 100, 50);
+    
 }
 
 void ToneWheelSineAudioProcessorEditor::initSlider(Slider& slider, int position)
 {
     slider.setSliderStyle (Slider::LinearBarVertical);
     slider.setColour(Slider::ColourIds::thumbColourId, Colours::white);
-
     slider.setRange(0.0, 1.0, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Bar");
@@ -154,6 +252,29 @@ void ToneWheelSineAudioProcessorEditor::initPhaseSlider(Slider& slider, int posi
     slider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
     slider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
     slider.setRange(0.0, 2*double_Pi, 0.01);
+    slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    slider.setTextValueSuffix ("Rotary");
+    slider.setValue(0.0);
+    
+}
+
+void ToneWheelSineAudioProcessorEditor::initWaveSlider(Slider& slider, int position)
+{
+    slider.setSliderStyle (Slider::LinearVertical);
+    slider.setColour(Slider::ColourIds::thumbColourId, Colours::white);
+    slider.setRange(0.0, 1.0, 1.0);
+    slider.setValue(0.0);
+    slider.setSize(10, 30);
+    slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
+    
+}
+
+void ToneWheelSineAudioProcessorEditor::initTremSlider(Slider& slider, int position)
+{
+    slider.setSliderStyle (Slider::Rotary);
+    slider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
+    slider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
+    slider.setRange(0.0, 1.0, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Rotary");
     slider.setValue(0.0);
@@ -174,6 +295,12 @@ void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
         //DBG("Harm");
         processor.harmonicStyle=harmonicStyle.getValue();
     }
+    else if (&tremoloDepthSlider==slider){
+        processor.tremoloDepth=harmonicStyle.getValue();
+    }
+    else if (&tremoloSpeedSlider==slider){
+        processor.tremoloSpeed=harmonicStyle.getValue();
+    }
     else
     {
         juce::String sliderName = slider->getName();
@@ -183,6 +310,20 @@ void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
             //DBG("Phase");
             value = slider->getValue();
             float* sliderValue = processor.slidersPhaseValues.operator[](sliderName);
+            *sliderValue = value;
+        }
+        else if (sliderName.startsWith("wave")){
+            //one of the phase sliders
+            //DBG("Phase");
+            value = slider->getValue();
+            int* sliderValue = processor.slidersWaveValues.operator[](sliderName);
+            *sliderValue = value;
+        }
+        else if (sliderName.startsWith("trem")){
+            //one of the phase sliders
+            //DBG("Phase");
+            value = slider->getValue();
+            float* sliderValue = processor.slidersTremValues.operator[](sliderName);
             *sliderValue = value;
         }
         else {

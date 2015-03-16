@@ -20,16 +20,6 @@ ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
     theWheelGenerator = new WheelSineGenerator();
     harmonicStyle=1;
     
-    subSliderPhaseValue=0;
-    slider5PhaseValue=0;
-    mainSliderPhaseValue=0;
-    slider8PhaseValue=0;
-    slider12PhaseValue=0;
-    slider15PhaseValue=0;
-    slider17PhaseValue=0;
-    slider19PhaseValue=0;
-    slider22PhaseValue=0;
-    
     subSliderValue=0;
     slider5Value=0;
     mainSliderValue=0;
@@ -49,6 +39,16 @@ ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
     slidersValues.set("slider17", &slider17Value);
     slidersValues.set("slider19", &slider19Value);
     slidersValues.set("slider22", &slider22Value);
+    
+    subSliderPhaseValue=0;
+    slider5PhaseValue=0;
+    mainSliderPhaseValue=0;
+    slider8PhaseValue=0;
+    slider12PhaseValue=0;
+    slider15PhaseValue=0;
+    slider17PhaseValue=0;
+    slider19PhaseValue=0;
+    slider22PhaseValue=0;
 
     slidersPhaseValues.set("phaseSubSlider",&subSliderPhaseValue);
     slidersPhaseValues.set("phaseSlider5",&slider5PhaseValue);
@@ -59,6 +59,47 @@ ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
     slidersPhaseValues.set("phaseSlider17",&slider17PhaseValue);
     slidersPhaseValues.set("phaseSlider19",&slider19PhaseValue);
     slidersPhaseValues.set("phaseSlider22",&slider22PhaseValue);
+    
+    subSliderWaveValue=0;
+    slider5WaveValue=0;
+    mainSliderWaveValue=0;
+    slider8WaveValue=0;
+    slider12WaveValue=0;
+    slider15WaveValue=0;
+    slider17WaveValue=0;
+    slider19WaveValue=0;
+    slider22WaveValue=0;
+   
+    slidersWaveValues.set("waveSubSlider",&subSliderWaveValue);
+    slidersWaveValues.set("waveSlider5",&slider5WaveValue);
+    slidersWaveValues.set("waveMainSlider",&mainSliderWaveValue);
+    slidersWaveValues.set("waveSlider8",&slider8WaveValue);
+    slidersWaveValues.set("waveSlider12",&slider12WaveValue);
+    slidersWaveValues.set("waveSlider15",&slider15WaveValue);
+    slidersWaveValues.set("waveSlider17",&slider17WaveValue);
+    slidersWaveValues.set("waveSlider19",&slider19WaveValue);
+    slidersWaveValues.set("waveSlider22",&slider22WaveValue);
+
+    subSliderTremValue=0;
+    slider5TremValue=0;
+    mainSliderTremValue=0;
+    slider8TremValue=0;
+    slider12TremValue=0;
+    slider15TremValue=0;
+    slider17TremValue=0;
+    slider19TremValue=0;
+    slider22TremValue=0;
+    
+    slidersTremValues.set("tremSubSlider",&subSliderTremValue);
+    slidersTremValues.set("tremSlider5",&slider5TremValue);
+    slidersTremValues.set("tremMainSlider",&mainSliderTremValue);
+    slidersTremValues.set("tremSlider8",&slider8TremValue);
+    slidersTremValues.set("tremSlider12",&slider12TremValue);
+    slidersTremValues.set("tremSlider15",&slider15TremValue);
+    slidersTremValues.set("tremSlider17",&slider17TremValue);
+    slidersTremValues.set("tremSlider19",&slider19TremValue);
+    slidersTremValues.set("tremSlider22",&slider22TremValue);
+    
     
 }
 
@@ -179,7 +220,15 @@ void ToneWheelSineAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	theWheelGenerator->initWheel(sampleRate,&slidersValues,&slidersPhaseValues,&harmonicStyle);
+	theWheelGenerator->initWheel(
+                                 sampleRate,
+                                 &slidersValues,
+                                 &slidersPhaseValues,
+                                 &slidersWaveValues,
+                                 &slidersTremValues,
+                                 &harmonicStyle,
+                                 &tremoloSpeed,
+                                 &tremoloDepth);
 
 }
 

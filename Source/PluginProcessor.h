@@ -77,8 +77,16 @@ public:
     float subSliderPhaseValue, slider5PhaseValue, mainSliderPhaseValue, slider8PhaseValue, slider12PhaseValue, slider15PhaseValue, slider17PhaseValue, slider19PhaseValue, slider22PhaseValue;
     HashMap<String, float*> slidersPhaseValues;
     
+    int subSliderWaveValue, slider5WaveValue, mainSliderWaveValue, slider8WaveValue, slider12WaveValue, slider15WaveValue, slider17WaveValue, slider19WaveValue, slider22WaveValue;
+    HashMap<String, int*> slidersWaveValues;
+    
+    float subSliderTremValue, slider5TremValue, mainSliderTremValue, slider8TremValue, slider12TremValue, slider15TremValue, slider17TremValue, slider19TremValue, slider22TremValue;
+    HashMap<String, float*> slidersTremValues;
+    
     float mainVolume;
     int harmonicStyle;
+    float tremoloSpeed;
+    float tremoloDepth;
     
 	
 
