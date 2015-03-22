@@ -110,7 +110,7 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     tremoloSpeedSlider.setSliderStyle (Slider::Rotary);
     tremoloSpeedSlider.setColour(Slider::ColourIds::rotarySliderOutlineColourId, Colours::slategrey);
     tremoloSpeedSlider.setColour(Slider::ColourIds::rotarySliderFillColourId, Colours::white);
-    tremoloSpeedSlider.setRange(0.0, 1.0, 0.01);
+    tremoloSpeedSlider.setRange(0.01, 1.0, 0.01);
     tremoloSpeedSlider.setTextValueSuffix ("Tremolo Speed");
     tremoloSpeedSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     tremoloSpeedSlider.setValue(0.5);
@@ -296,10 +296,10 @@ void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
         processor.harmonicStyle=harmonicStyle.getValue();
     }
     else if (&tremoloDepthSlider==slider){
-        processor.tremoloDepth=harmonicStyle.getValue();
+        processor.tremoloDepth=tremoloDepthSlider.getValue();
     }
     else if (&tremoloSpeedSlider==slider){
-        processor.tremoloSpeed=harmonicStyle.getValue();
+        processor.tremoloSpeed=tremoloSpeedSlider.getValue();
     }
     else
     {

@@ -19,6 +19,8 @@ ToneWheelSineAudioProcessor::ToneWheelSineAudioProcessor()
 {
     theWheelGenerator = new WheelSineGenerator();
     harmonicStyle=1;
+    tremoloDepth=0.5;
+    tremoloSpeed=0.5;
     
     subSliderValue=0;
     slider5Value=0;
@@ -258,6 +260,7 @@ bool ToneWheelSineAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* ToneWheelSineAudioProcessor::createEditor()
 {
+    DBG("Createeditor");
     return new ToneWheelSineAudioProcessorEditor (*this);
 }
 

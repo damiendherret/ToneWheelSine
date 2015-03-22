@@ -14,6 +14,7 @@ public:
     void handleMidiEvent (const MidiMessage& m);
 	void initWheel(double sampleRate, HashMap<String, float*> *, HashMap<String, float*> *, HashMap<String, int*> *, HashMap<String, float*> *, int*, float*, float*);
     void setParameter(String name, float parameterValue);
+    void debugParameters();
     
 private:
 	//==============================================================================
@@ -21,12 +22,17 @@ private:
     float getValue(double frequency, double time, double phase,int waveform);
     float getSineValue(double frequency, double time, double phase);
     float getTriangleValue(double frequency, double time, double phase);
+    float getTremoloGain(double time);
     float computeNote(int note);
 	double sampleRate;
 	double currentPhase, phasePerSample;
 	float amplitude;
     double attackTimeInMs;
     double releaseTimeInMs;
+    double gainOn = 1.01;
+    double gainOff = 0.99;
+    float tremBaseFrequency;
+    
     juce::HashMap<int, struct WheelNote>notesOn;
     
     float subSlider, slider5, mainSlider, slider8, slider12, slider15, slider17, slider19, slider22;
@@ -42,6 +48,8 @@ private:
     float* tremoloSpeed;
     float* tremoloDepth;
     //juce::Array<struct WheelNote> notesOn;
+    
+    bool ready = false;
     
 
 };
