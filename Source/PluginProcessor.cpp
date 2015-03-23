@@ -271,6 +271,66 @@ void ToneWheelSineAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    // Create an outer XML element..
+    XmlElement xml ("TWSSettings");
+    
+    //sore all necessary attributes
+    
+    //generic attribute
+    xml.setAttribute ("mainVolume", mainVolume);
+    xml.setAttribute ("harmonicStyle", harmonicStyle);
+    xml.setAttribute ("tremoloSpeed", tremoloSpeed);
+    xml.setAttribute ("tremoloDepth", tremoloDepth);
+    
+    //sliders values
+    xml.setAttribute ("subSliderValue", subSliderValue);
+    xml.setAttribute ("slider5Value", slider5Value);
+    xml.setAttribute ("mainSliderValue", mainSliderValue);
+    xml.setAttribute ("slider8Value", slider8Value);
+    xml.setAttribute ("slider12Value", slider12Value);
+    xml.setAttribute ("slider15Value", slider15Value);
+    xml.setAttribute ("slider17Value", slider17Value);
+    xml.setAttribute ("slider19Value", slider19Value);
+    xml.setAttribute ("slider22Value", slider22Value);
+    
+    //phase sliders values
+    xml.setAttribute ("subSliderPhaseValue", subSliderPhaseValue);
+    xml.setAttribute ("slider5PhaseValue", slider5PhaseValue);
+    xml.setAttribute ("mainSliderPhaseValue", mainSliderPhaseValue);
+    xml.setAttribute ("slider8PhaseValue", slider8PhaseValue);
+    xml.setAttribute ("slider12PhaseValue", slider12PhaseValue);
+    xml.setAttribute ("slider15PhaseValue", slider15PhaseValue);
+    xml.setAttribute ("slider17PhaseValue", slider17PhaseValue);
+    xml.setAttribute ("slider19PhaseValue", slider19PhaseValue);
+    xml.setAttribute ("slider22PhaseValue", slider22PhaseValue);
+    
+    //wave sliders values
+    xml.setAttribute ("subSliderWaveValue", subSliderWaveValue);
+    xml.setAttribute ("slider5WaveValue", slider5WaveValue);
+    xml.setAttribute ("mainSliderWaveValue", mainSliderWaveValue);
+    xml.setAttribute ("slider8WaveValue", slider8WaveValue);
+    xml.setAttribute ("slider12WaveValue", slider12WaveValue);
+    xml.setAttribute ("slider15WaveValue", slider15WaveValue);
+    xml.setAttribute ("slider17WaveValue", slider17WaveValue);
+    xml.setAttribute ("slider19WaveValue", slider19WaveValue);
+    xml.setAttribute ("slider22WaveValue", slider22WaveValue);
+    
+    //trem sliders values
+    xml.setAttribute ("subSliderTremValue", subSliderTremValue);
+    xml.setAttribute ("slider5TremValue", slider5TremValue);
+    xml.setAttribute ("mainSliderTremValue", mainSliderTremValue);
+    xml.setAttribute ("slider8TremValue", slider8TremValue);
+    xml.setAttribute ("slider12TremValue", slider12TremValue);
+    xml.setAttribute ("slider15TremValue", slider15TremValue);
+    xml.setAttribute ("slider17TremValue", slider17TremValue);
+    xml.setAttribute ("slider19TremValue", slider19TremValue);
+    xml.setAttribute ("slider22TremValue", slider22TremValue);
+    
+    // then use this helper function to stuff it into the binary blob and return it..
+    copyXmlToBinary (xml, destData);
+    
+    
 }
 
 
@@ -278,6 +338,83 @@ void ToneWheelSineAudioProcessor::setStateInformation (const void* data, int siz
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    
+    // This getXmlFromBinary() helper function retrieves our XML from the binary blob..
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    
+    if (xmlState != nullptr)
+    {
+        // make sure that it's actually our type of XML object..
+        if (xmlState->hasTagName ("TWSSettings"))
+        {
+            // ok, now pull out our parameters..
+            //generic attribute
+            mainVolume = (float) xmlState->getDoubleAttribute ("mainVolume", mainVolume);
+            harmonicStyle = (float) xmlState->getDoubleAttribute ("harmonicStyle", harmonicStyle);
+            tremoloSpeed = (float) xmlState->getDoubleAttribute ("tremoloSpeed", tremoloSpeed);
+            tremoloDepth = (float) xmlState->getDoubleAttribute ("tremoloDepth", tremoloDepth);
+            
+            //sliders values
+            subSliderValue = (float) xmlState->getDoubleAttribute ("subSliderValue", subSliderValue);
+            slider5Value = (float) xmlState->getDoubleAttribute ("slider5Value", slider5Value);
+            mainSliderValue = (float) xmlState->getDoubleAttribute ("mainSliderValue", mainSliderValue);
+            slider8Value = (float) xmlState->getDoubleAttribute ("slider8Value", slider8Value);
+            slider12Value = (float) xmlState->getDoubleAttribute ("slider12Value", slider12Value);
+            slider15Value = (float) xmlState->getDoubleAttribute ("slider15Value", slider15Value);
+            slider17Value = (float) xmlState->getDoubleAttribute ("slider17Value", slider17Value);
+            slider19Value = (float) xmlState->getDoubleAttribute ("slider19Value", slider19Value);
+            slider22Value = (float) xmlState->getDoubleAttribute ("slider22Value", slider22Value);
+            
+            //phase sliders values
+            subSliderPhaseValue = (float) xmlState->getDoubleAttribute ("subSliderPhaseValue", subSliderPhaseValue);
+            slider5PhaseValue = (float) xmlState->getDoubleAttribute ("slider5PhaseValue", slider5PhaseValue);
+            mainSliderPhaseValue = (float) xmlState->getDoubleAttribute ("mainSliderPhaseValue", mainSliderPhaseValue);
+            slider8PhaseValue = (float) xmlState->getDoubleAttribute ("slider8PhaseValue", slider8PhaseValue);
+            slider12PhaseValue = (float) xmlState->getDoubleAttribute ("slider12PhaseValue", slider12PhaseValue);
+            slider15PhaseValue = (float) xmlState->getDoubleAttribute ("slider15PhaseValue", slider15PhaseValue);
+            slider17PhaseValue = (float) xmlState->getDoubleAttribute ("slider17PhaseValue", slider17PhaseValue);
+            slider19PhaseValue = (float) xmlState->getDoubleAttribute ("slider19PhaseValue", slider19PhaseValue);
+            slider22PhaseValue = (float) xmlState->getDoubleAttribute ("slider22PhaseValue", slider22PhaseValue);
+            
+            //wave sliders values
+            subSliderWaveValue = xmlState->getIntAttribute ("subSliderWaveValue", subSliderWaveValue);
+            slider5WaveValue = xmlState->getIntAttribute ("slider5WaveValue", slider5WaveValue);
+            mainSliderWaveValue = xmlState->getIntAttribute ("mainSliderWaveValue", mainSliderWaveValue);
+            slider8WaveValue = xmlState->getIntAttribute ("slider8WaveValue", slider8WaveValue);
+            slider12WaveValue = xmlState->getIntAttribute ("slider12WaveValue", slider12WaveValue);
+            slider15WaveValue = xmlState->getIntAttribute ("slider15WaveValue", slider15WaveValue);
+            slider17WaveValue = xmlState->getIntAttribute ("slider17WaveValue", slider17WaveValue);
+            slider19WaveValue = xmlState->getIntAttribute ("slider19WaveValue", slider19WaveValue);
+            slider22WaveValue = xmlState->getIntAttribute ("slider22WaveValue", slider22WaveValue);
+            
+            //trem sliders values
+            subSliderTremValue = (float) xmlState->getDoubleAttribute ("subSliderTremValue", subSliderTremValue);
+            slider5TremValue = (float) xmlState->getDoubleAttribute ("slider5TremValue", slider5TremValue);
+            mainSliderTremValue = (float) xmlState->getDoubleAttribute ("mainSliderTremValue", mainSliderTremValue);
+            slider8TremValue = (float) xmlState->getDoubleAttribute ("slider8TremValue", slider8TremValue);
+            slider12TremValue = (float) xmlState->getDoubleAttribute ("slider12TremValue", slider12TremValue);
+            slider15TremValue = (float) xmlState->getDoubleAttribute ("slider15TremValue", slider15TremValue);
+            slider17TremValue = (float) xmlState->getDoubleAttribute ("slider17TremValue", slider17TremValue);
+            slider19TremValue = (float) xmlState->getDoubleAttribute ("slider19TremValue", slider19TremValue);
+            slider22TremValue = (float) xmlState->getDoubleAttribute ("slider22TremValue", slider22TremValue);
+            
+            //notify the generator
+            theWheelGenerator->initWheel(
+                                         0,
+                                         &slidersValues,
+                                         &slidersPhaseValues,
+                                         &slidersWaveValues,
+                                         &slidersTremValues,
+                                         &harmonicStyle,
+                                         &tremoloSpeed,
+                                         &tremoloDepth);
+            
+            //notify the UI
+            
+            
+        }
+    }
 }
 
 //==============================================================================

@@ -88,7 +88,10 @@ void WheelSineGenerator::initWheel(
     }
    
 	//frequency = 440;
-    sampleRate = initialSampleRate;
+    if (initialSampleRate != 0)
+    {
+        sampleRate = initialSampleRate;
+    }
 	currentPhase = 0;
 
 	amplitude = 0.5f;

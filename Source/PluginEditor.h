@@ -32,6 +32,7 @@ public:
     void initPhaseSlider(Slider &slider, int position);
     void initWaveSlider(Slider &slider, int position);
     void initTremSlider(Slider &slider, int position);
+    void reloadValues();
     void sliderValueChanged (Slider* slider) override;
 
 
@@ -65,6 +66,9 @@ private:
     Slider harmonicStyle;
     Slider tremoloSpeedSlider;
     Slider tremoloDepthSlider;
+    
+    //Reload Management
+    bool valuesSet = false;
 
     
     
