@@ -260,7 +260,6 @@ bool ToneWheelSineAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* ToneWheelSineAudioProcessor::createEditor()
 {
-    DBG("Create Editor");
     return new ToneWheelSineAudioProcessorEditor (*this);
 }
 

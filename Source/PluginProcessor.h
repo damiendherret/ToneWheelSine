@@ -87,8 +87,7 @@ public:
     int harmonicStyle;
     float tremoloSpeed;
     float tremoloDepth;
-    
-	//bool isValuesLoaded = false;
+
     bool isInitialState = true;
 
 private:

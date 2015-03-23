@@ -6,13 +6,11 @@ struct WheelNote
     int note;
     bool attacking;
     bool releasing;
-    //int64 noteOnTime;
-    //int64 noteOffTime;
     double noteGain;
     
 };
 
-WheelSineGenerator::WheelSineGenerator(/*ToneWheelSineAudioProcessor& p) : processor (p)*/)
+WheelSineGenerator::WheelSineGenerator()
 {
 }
 
@@ -92,20 +90,20 @@ void WheelSineGenerator::initWheel(
     {
         sampleRate = initialSampleRate;
     }
+    
 	currentPhase = 0;
-
-	amplitude = 0.5f;
     
-    attackTimeInMs = 150;
-    releaseTimeInMs = 150;
-    
+    /*-------------------------------------
+     Param that can be changed
+     ------------------------------------*/
+    amplitude = 0.5f;
     gainOn = 1.01;
     gainOff = 0.99;
     
     tremBaseFrequency = 5; //5Hz
     
     //DEBUG ------------------
-    debugParameters();
+    //debugParameters();
     
     ready=true;
     
@@ -114,7 +112,9 @@ void WheelSineGenerator::initWheel(
 void WheelSineGenerator::setParameter(String parameterName, float parameterValue){
     
     
-    // gain sliders management
+    /*-------------------------------------
+     Gain sliders Management
+     ------------------------------------*/
     if (parameterName.equalsIgnoreCase("subSlider")){
         subSlider = *slidersValues.operator[]("subSlider");
     }
@@ -143,7 +143,9 @@ void WheelSineGenerator::setParameter(String parameterName, float parameterValue
         slider22 = *slidersValues.operator[]("slider22");
     }
     
-    //phase sliders management
+    /*-------------------------------------
+     phase sliders management
+     ------------------------------------*/
     else if (parameterName.equalsIgnoreCase("phaseSubSlider")){
         phaseSubSlider = *slidersPhaseValues.operator[]("phaseSubSlider");
     }
@@ -172,7 +174,9 @@ void WheelSineGenerator::setParameter(String parameterName, float parameterValue
         phaseSlider22 = *slidersPhaseValues.operator[]("phaseSlider22");
     }
     
-    //wave sliders management
+    /*-------------------------------------
+     wave sliders management
+     ------------------------------------*/
     else if (parameterName.equalsIgnoreCase("waveSubSlider")){
         waveSubSlider = *slidersWaveValues.operator[]("waveSubSlider");
     }
@@ -201,7 +205,9 @@ void WheelSineGenerator::setParameter(String parameterName, float parameterValue
         waveSlider22 = *slidersWaveValues.operator[]("waveSlider22");
     }
     
-    //trem sliders management
+    /*-------------------------------------
+     trem sliders management
+     ------------------------------------*/
     else if (parameterName.equalsIgnoreCase("tremSubSlider")){
         tremSubSlider = *slidersTremValues.operator[]("tremSubSlider");
     }
@@ -230,17 +236,18 @@ void WheelSineGenerator::setParameter(String parameterName, float parameterValue
         tremSlider22 = *slidersTremValues.operator[]("tremSlider22");
     }
 
-    //debugParameters();
 }
 
 void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int startSample, int numSamples, MidiBuffer& midiMessages)
 {
     if (!ready){
-        DBG("Called while not ready");
+        //DBG("Called while not ready");
         return;
     }
     
-    //handle midi messages
+    /*-------------------------------------
+     Handle MIDI messages
+     ------------------------------------*/
     int time;
     MidiMessage m;
     for (MidiBuffer::Iterator i (midiMessages); i.getNextEvent (m, time);)
@@ -248,22 +255,23 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
         handleMidiEvent(m);
     }
     
-    //generate sines and mix
-
+    /*-------------------------------------
+     Generate sounds and mix
+     ------------------------------------*/
     for (int i = 0; i < numSamples; ++i)
     {
         float sample = 0;
-        //int64 now = Time::getCurrentTime().toMilliseconds();
-        
         HashMap<int, struct WheelNote>::Iterator iter (notesOn);
         
         while (iter.next())
         {
-            
             int noteNumber = iter.getKey();
             struct WheelNote wNote = iter.getValue();
             double gain=1.0;
             
+            /*-------------------------------------
+             Gestion Attack and release
+             ------------------------------------*/
             if (wNote.attacking)
             {
                 wNote.noteGain = wNote.noteGain * gainOn;
@@ -284,73 +292,32 @@ void WheelSineGenerator::renderNextBlock(AudioSampleBuffer& outputBuffer, int st
                     notesOn.remove(noteNumber);
                 }
             }
-
             
-            /*------------------------------------------------------
-            if (wNote.attacking)
-            {
-                //DBG("attacking");
-                if ( now > (wNote.noteOnTime+attackTimeInMs))
-                {
-                    //attack is done, let's note it
-                    wNote.attacking=false;
-                    //push modifications
-                    notesOn.set(wNote.note,wNote);
-                    //DBG("attacking - done");
-                }
-                else{
-                    //calculate the gain to apply for this particular time of the attac
-                    gain = (now - wNote.noteOnTime) / attackTimeInMs;
-                    //DBG((now - wNote.noteOnTime)/attackTimeInMs);
-                    //DBG("attacking ....");
-                }
-                    
-            }
-            else if (wNote.releasing)
-            {
-                //DBG("releasing");
-                if (now > (wNote.noteOffTime+releaseTimeInMs))
-                {
-                    //release is done, let kill the note
-                    //forcing gain to 0
-                    gain=0.0;
-                    notesOn.remove(noteNumber);
-                    //DBG("kill");
-                }
-                else {
-                    //calculate the gain to apply
-                    gain = ((wNote.noteOffTime+releaseTimeInMs) - now) / releaseTimeInMs;
-                    //DBG("releasing ....");
-                }
-            }
-            --------------------------------------------------------*/
-        
-            
-            
-            //compute the sample for this note
-            //sample = sample + amplitude * (*sliderGain) * gain * getSineValue(MidiMessage::getMidiNoteInHertz(wNote.note),currentPhase,*phase);
-            
-            //final
-            sample += amplitude * gain * computeNote(wNote.note);
-            
-            //debug
-            //sample += amplitude * gain * getSineValue(MidiMessage::getMidiNoteInHertz(wNote.note),currentPhase,0);
+            /*-------------------------------------
+             Compute sample
+             ------------------------------------*/
+            sample += amplitude
+                        * gain
+                        * computeNote(wNote.note);
         
         }
         
+        /*-------------------------------------
+         Prepare next sample
+         ------------------------------------*/
         currentPhase += (1/sampleRate);
 
-        
+        /*-------------------------------------
+         Writing Output
+         ------------------------------------*/
         for (int j = outputBuffer.getNumChannels(); --j >= 0;)
         {
-            //DBG(sample);
+
             outputBuffer.addSample(j, startSample, sample);
         }
         ++startSample;
         
     }
-
-
 }
 
 
@@ -361,7 +328,10 @@ float WheelSineGenerator::computeNote(int note)
     
     if (*harmonicStyle==0)
     {
-        //tempered harmonics*
+        /*-------------------------------------
+         Tempered harmonics
+         Harmonics are notes
+         ------------------------------------*/
         calculus += (1 - tremSubSlider * tremGain) * subSlider * getValue(MidiMessage::getMidiNoteInHertz(note-12),currentPhase,phaseSubSlider,waveSubSlider);
         calculus += (1 - tremSlider5 * tremGain) * slider5 * getValue(MidiMessage::getMidiNoteInHertz(note+7),currentPhase,phaseSlider5,waveSlider5);
         calculus += (1 - tremMainSlider * tremGain) * mainSlider * getValue(MidiMessage::getMidiNoteInHertz(note),currentPhase,phaseMainSlider,waveMainSlider);
@@ -374,7 +344,10 @@ float WheelSineGenerator::computeNote(int note)
     }
     else {
         
-        //pure harmonics
+        /*-------------------------------------
+         Pure harmonics
+         Harmonics frequency multiples
+         ------------------------------------*/
         double frequency = MidiMessage::getMidiNoteInHertz(note);
 
         calculus += (1 - tremSubSlider * tremGain) * subSlider * getValue(frequency/2,currentPhase,phaseSubSlider,waveSubSlider);
@@ -409,23 +382,15 @@ float WheelSineGenerator::getValue(double frequency, double time, double phase, 
 
 float WheelSineGenerator::getSineValue(double frequency, double time, double phase)
 {
-    //DBG("sine");
     return std::sin((2.0 * double_Pi * frequency * time) + phase);
 }
 
 float WheelSineGenerator::getTriangleValue(double frequency, double time, double phase)
 {
-    //DBG("tri");
-    //DBG(time);
-    //double timeinSeconds = time /* sampleRate*/;
-    double demiPeriod = (1 / frequency) /*/ 2*/;
-    
-    double tSurA = time / demiPeriod;
-    
-    
+    double period = (1 / frequency);
+    double tSurA = time / period;
     double xt = std::abs(2 * (tSurA - floor(tSurA + 0.5)));
-    //DBG(tSurA - floor(tSurA + 0.5));
-    //DBG(xt);
+    
     return 2 * (xt - 0.5);
 
 }
@@ -439,14 +404,10 @@ void WheelSineGenerator::handleMidiEvent (const MidiMessage& m)
 
     if (m.isNoteOn())
     {
-        //DBG("Note ON");
         struct WheelNote wNote;
         wNote.note=m.getNoteNumber();
         wNote.attacking=true;
         wNote.releasing=false;
-        //wNote.noteOnTime=Time::getCurrentTime().toMilliseconds();
-        //wNote.noteOffTime=Time::getCurrentTime().toMilliseconds();
-        
         wNote.noteGain = 0.05;
         
         notesOn.set(wNote.note,wNote);
@@ -454,23 +415,21 @@ void WheelSineGenerator::handleMidiEvent (const MidiMessage& m)
     }
     else if (m.isNoteOff())
     {
-        //DBG("Note OFF");
         struct WheelNote wNote;
         wNote = notesOn.operator[](m.getNoteNumber());
         wNote.attacking=false;
         wNote.releasing=true;
-        //wNote.noteOffTime=Time::getCurrentTime().toMilliseconds();
-        
+      
         notesOn.set(wNote.note,wNote);
 
     }
     else if (m.isAllNotesOff() || m.isAllSoundOff())
     {
-        //TODO
+        //Not implemented
     }
     else if (m.isPitchWheel())
     {
-        //TODO
+        //Not implemented
         //const int channel = m.getChannel();
         //const int wheelPos = m.getPitchWheelValue();
         //lastPitchWheelValues [channel - 1] = wheelPos;
@@ -478,12 +437,12 @@ void WheelSineGenerator::handleMidiEvent (const MidiMessage& m)
     }
     else if (m.isAftertouch())
     {
-        //TODO
+        ////Not implemented
         //handleAftertouch (m.getChannel(), m.getNoteNumber(), m.getAfterTouchValue());
     }
     else if (m.isController())
     {
-        //TODO
+        ////Not implemented
         //handleController (m.getChannel(), m.getControllerNumber(), m.getControllerValue());
     }
 }

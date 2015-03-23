@@ -7,7 +7,7 @@ class WheelSineGenerator
 {
 public:
 	//==============================================================================
-	WheelSineGenerator(/*ToneWheelSineAudioProcessor&*/);
+	WheelSineGenerator();
 	~WheelSineGenerator();
 	void getNextAudioBlock(const AudioSourceChannelInfo&);
 	void renderNextBlock(AudioSampleBuffer& outputBuffer, int startSample, int numSamples, MidiBuffer& midiMessages);
@@ -18,7 +18,6 @@ public:
     
 private:
 	//==============================================================================
-    //ToneWheelSineAudioProcessor& processor;
     float getValue(double frequency, double time, double phase,int waveform);
     float getSineValue(double frequency, double time, double phase);
     float getTriangleValue(double frequency, double time, double phase);
@@ -27,8 +26,6 @@ private:
 	double sampleRate;
 	double currentPhase, phasePerSample;
 	float amplitude;
-    double attackTimeInMs;
-    double releaseTimeInMs;
     double gainOn = 1.01;
     double gainOff = 0.99;
     float tremBaseFrequency;
@@ -47,7 +44,6 @@ private:
     int* harmonicStyle;
     float* tremoloSpeed;
     float* tremoloDepth;
-    //juce::Array<struct WheelNote> notesOn;
     
     bool ready = false;
     
