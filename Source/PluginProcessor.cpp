@@ -260,7 +260,7 @@ bool ToneWheelSineAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* ToneWheelSineAudioProcessor::createEditor()
 {
-    DBG("Createeditor");
+    DBG("Create Editor");
     return new ToneWheelSineAudioProcessorEditor (*this);
 }
 
@@ -411,7 +411,7 @@ void ToneWheelSineAudioProcessor::setStateInformation (const void* data, int siz
                                          &tremoloDepth);
             
             //notify the UI
-            
+            //isValuesLoaded = true;
             
         }
     }

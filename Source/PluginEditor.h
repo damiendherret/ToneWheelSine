@@ -36,6 +36,7 @@ public:
     void sliderValueChanged (Slider* slider) override;
 
 
+
 private:    
     
     ToneWheelSineAudioProcessor& processor;
@@ -68,7 +69,7 @@ private:
     Slider tremoloDepthSlider;
     
     //Reload Management
-    bool valuesSet = false;
+    //bool valuesSet = false;
 
     
     

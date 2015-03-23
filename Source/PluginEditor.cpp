@@ -16,6 +16,7 @@
 ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelSineAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
+    DBG("New ToneWheelSineAudioProcessorEditor");
     
     sliders.add(&subSlider);
     sliders.add(&slider5);
@@ -101,7 +102,7 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     harmonicStyle.setSliderStyle(Slider::LinearVertical);
     harmonicStyle.setColour(Slider::ColourIds::thumbColourId, Colours::white);
     harmonicStyle.setRange(0.0, 1.0, 1.0);
-    if (!valuesSet) harmonicStyle.setValue(1.0);
+    if (processor.isInitialState) harmonicStyle.setValue(1.0);
     harmonicStyle.setSize(10, 30);
     harmonicStyle.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     harmonicStyle.addListener(this);
@@ -113,7 +114,7 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     tremoloSpeedSlider.setRange(0.01, 1.0, 0.01);
     tremoloSpeedSlider.setTextValueSuffix ("Tremolo Speed");
     tremoloSpeedSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
-    if (!valuesSet) tremoloSpeedSlider.setValue(0.5);
+    if (processor.isInitialState) tremoloSpeedSlider.setValue(0.5);
     tremoloSpeedSlider.addListener(this);
     addAndMakeVisible(&tremoloSpeedSlider);
     
@@ -123,7 +124,7 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     tremoloDepthSlider.setRange(0.0, 1.0, 0.01);
     tremoloDepthSlider.setTextValueSuffix ("Tremolo Depth");
     tremoloDepthSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
-    if (!valuesSet) tremoloDepthSlider.setValue(0.5);
+    if (processor.isInitialState) tremoloDepthSlider.setValue(0.5);
     tremoloDepthSlider.addListener(this);
     addAndMakeVisible(&tremoloDepthSlider);
     
@@ -133,20 +134,24 @@ ToneWheelSineAudioProcessorEditor::ToneWheelSineAudioProcessorEditor (ToneWheelS
     volumeSlider.setRange(0.0, 1.0, 0.01);
     volumeSlider.setTextValueSuffix ("MainVolume");
     volumeSlider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
-    if (!valuesSet) volumeSlider.setValue(0.5);
+    if (processor.isInitialState) volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(&volumeSlider);
+
     
 }
 
 ToneWheelSineAudioProcessorEditor::~ToneWheelSineAudioProcessorEditor()
 {
+    DBG("Delete ToneWheelSineAudioProcessorEditor");
 }
 
 //==============================================================================
 void ToneWheelSineAudioProcessorEditor::paint (Graphics& g)
 {
-    //g.fillAll (Colours::white);
+   
+    DBG("ToneWheelSineAudioProcessorEditor::paint");
+    
     g.setGradientFill (ColourGradient (Colours::grey, 0, 0,
                                        Colours::black, 0, (float) getHeight(), false));
     g.fillAll();
@@ -195,11 +200,12 @@ void ToneWheelSineAudioProcessorEditor::paint (Graphics& g)
     g.drawFittedText("Speed", 130, 330, 80, 20, Justification::left, 1);
     g.drawFittedText("Depth", 130, 360, 80, 20, Justification::left, 1);
     
-    
+    reloadValues();
 }
 
 void ToneWheelSineAudioProcessorEditor::resized()
 {
+    DBG("ToneWheelSineAudioProcessorEditor::resized");
     for (int i=0;i<sliders.size();++i)
     {
         Slider *s = sliders.getUnchecked(i);
@@ -233,6 +239,8 @@ void ToneWheelSineAudioProcessorEditor::resized()
     tremoloDepthSlider.setBounds(110, 360, 20, 20);
     volumeSlider.setBounds(200, 340, 100, 50);
     
+    
+   
 }
 
 void ToneWheelSineAudioProcessorEditor::initSlider(Slider& slider, int position)
@@ -242,7 +250,7 @@ void ToneWheelSineAudioProcessorEditor::initSlider(Slider& slider, int position)
     slider.setRange(0.0, 1.0, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Bar");
-    if (!valuesSet) slider.setValue(0.0);
+    if (processor.isInitialState) slider.setValue(0.0);
     
 }
 
@@ -254,7 +262,7 @@ void ToneWheelSineAudioProcessorEditor::initPhaseSlider(Slider& slider, int posi
     slider.setRange(0.0, 2*double_Pi, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Rotary");
-    if (!valuesSet) slider.setValue(0.0);
+    if (processor.isInitialState) slider.setValue(0.0);
     
 }
 
@@ -263,7 +271,7 @@ void ToneWheelSineAudioProcessorEditor::initWaveSlider(Slider& slider, int posit
     slider.setSliderStyle (Slider::LinearVertical);
     slider.setColour(Slider::ColourIds::thumbColourId, Colours::white);
     slider.setRange(0.0, 1.0, 1.0);
-    if (!valuesSet) slider.setValue(0.0);
+    if (processor.isInitialState) slider.setValue(0.0);
     slider.setSize(10, 30);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     
@@ -277,7 +285,7 @@ void ToneWheelSineAudioProcessorEditor::initTremSlider(Slider& slider, int posit
     slider.setRange(0.0, 1.0, 0.01);
     slider.setTextBoxStyle (Slider::NoTextBox, false, 90, 0);
     slider.setTextValueSuffix ("Rotary");
-    if (!valuesSet) slider.setValue(0.0);
+    if (processor.isInitialState) slider.setValue(0.0);
     
 }
 
@@ -341,6 +349,8 @@ void ToneWheelSineAudioProcessorEditor::sliderValueChanged(Slider* slider)
 
 void ToneWheelSineAudioProcessorEditor::reloadValues()
 {
+    DBG("ToneWheelSineAudioProcessorEditor::reloadValues");
+    
     //Bar sliders ==============
     subSlider.setValue(processor.subSliderValue);
     slider5.setValue(processor.slider5Value);
@@ -392,8 +402,11 @@ void ToneWheelSineAudioProcessorEditor::reloadValues()
     tremoloSpeedSlider.setValue(processor.tremoloSpeed);
     tremoloDepthSlider.setValue(processor.tremoloDepth);
     
-    valuesSet = true;
+    processor.isInitialState=false;
+    //valuesSet = true;
+    //resized();
     
 }
+
 
 
