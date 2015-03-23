@@ -4,14 +4,14 @@
 
 *ToneWheelSine* is based on a hammond organ, hence the name, but it goes a little further :
 There is 9 drawbars representing each an harmonic in tha order :
-	- Sub harmonic
-	- 5th 
-	- Main
-	- 8th
-	- 12th
-	- 15th
-	- 17th
-	- 19th
+- Sub harmonic
+- 5th 
+- Main
+- 8th
+- 12th
+- 15th
+- 17th
+- 19th
 
 With the harmonic selector, th user can choose between Pure harmonics and tempered harmonics. 
 
