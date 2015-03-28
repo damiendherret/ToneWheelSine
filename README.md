@@ -13,6 +13,8 @@ there is 9 drawbars representing each one harmonic in that order :
 - 17th
 - 19th
 
+![TWS](http://dev.johnqui.com/img/tws/tws1.png "TWS 1")
+
 With the harmonic selector, the user can choose between "Pure harmonics" and "Tempered harmonics". 
 
 In the pure mode, all harmonics are reel harmonics (ie multiples of the main note frequency). If the note frequency is f, then the harmonics are (f/2, 1.5f, f, 2f, 3f, 4f, 5f, 6f, 8f).
@@ -34,3 +36,5 @@ The tremolo speed and depth are controlled by two rotary knobs
 Finally the volume knob allows you to adjust the overall volume.
 
 The plugin has yet been tested in Logic X on MacOs 10.9.5.
+
+![TWS2](http://dev.johnqui.com/img/tws/tws2.png "TWS 2")
